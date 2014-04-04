@@ -14,9 +14,10 @@
  	Ball qBall;
  	Camera camera;
  	Stick stick;
+ 	World();
  	void update();
  	void reset();
- 	void updateCollisionBall(Ball,Ball);
+ 	double getCosPhi(Ball,Ball);
  	bool isCollision(Ball,Ball);
  };
 

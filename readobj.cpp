@@ -240,6 +240,22 @@ void checkCollisionWithTable(){
 			world.ball[i].velocity.z = -world.ball[i].velocity.z/1.02;
 		}
 	}
+	if (world.qBall.pos.x < xmin ){
+		world.qBall.pos.x = xmin;
+		world.qBall.velocity.x = -world.qBall.velocity.x;
+	}
+	if(world.qBall.pos.x > xmax){
+		world.qBall.pos.x = xmax;
+		world.qBall.velocity.x = -world.qBall.velocity.x;
+	}
+	if (world.qBall.pos.z < zmin ){
+		world.qBall.pos.z = zmin;
+		world.qBall.velocity.z = -world.qBall.velocity.z;
+	}
+	if(world.qBall.pos.z > zmax){
+		world.qBall.pos.z = zmax;
+		world.qBall.velocity.z = -world.qBall.velocity.z;
+	}
 	
 }
 //**************************************************************
@@ -248,7 +264,6 @@ void display() {
 	glLoadIdentity();
 	//cam position update
 	gluLookAt( camPosX,60,camPosY, camPosX+(currMousePosX-win.width/2)/2,(-currMousePosY+win.height/2)/2,camPosY-50, 0,1,0);	 // Define a viewing transformation
-	//que ball update
 									  // Pop the current matrix stack
 	//general ball update
 	
@@ -257,11 +272,16 @@ void display() {
 		glTranslatef(0,-60,0);  //Multiply the current matrix by a translation matrix
 		glutSolidCube  (120); 
 	glPopMatrix();  // Pop the current matrix stack	
-
+	//que ball update
+	glPushMatrix();										  // Push the current matrix stack
+		glColor3f(1,1,1);
+		glTranslatef(world.qBall.pos.x,world.qBall.pos.y,world.qBall.pos.z);  //Multiply the current matrix by a translation matrix
+		glutSolidSphere  (world.qBall.radius,50,50); 
+	glPopMatrix();  // Pop the current matrix stack
 	for (int i = 0; i < 15; ++i)
 	{
 		glPushMatrix();										  // Push the current matrix stack
-			glColor3f(1,1,0);
+			glColor3f((double)1/i+1,(double)1/i+1,0);
 			glTranslatef(world.ball[i].pos.x,world.ball[i].pos.y,world.ball[i].pos.z);  //Multiply the current matrix by a translation matrix
 			glutSolidSphere  (world.ball[i].radius,50,50); 
 		glPopMatrix();  // Pop the current matrix stack
@@ -343,17 +363,12 @@ void mouse ( int key1, int key2, int mousePositionX, int mousePositionY )
 { 
 
 	if(key1 == 0){
-		for (int i = 0; i < 15; ++i)
-		{
-		world.ball[i].velocity.x =mousePositionX/100*(i+1)*0.1;
-		world.ball[i].velocity.z =mousePositionY/100*(i+2)*0.1;
-		world.ball[i].pos.x =0;
-		world.ball[i].pos.z =0;
-		//world.ball[i].pos.y =0;
-		}
+		world.reset();
+		world.qBall.velocity.x =mousePositionX/100;
+		world.qBall.velocity.z =mousePositionY/100;
 		
 	}
-	cout << mousePositionX;
+	//cout << mousePositionX;
 }
 void myMouseFunc(int x, int y){
 	cout << x << ":" << y << endl;
