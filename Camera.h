@@ -1,9 +1,15 @@
-#include "Game.h" 
+#ifndef CAMERA_H
+#define CAMERA_H
+
+ #include "Game.h"
+
  class Camera
  {
  public:
- 	Camera(arguments);
+ 	Camera();
  	void update();
  	void render();
  	/* data */
  };
+#endif
+ 

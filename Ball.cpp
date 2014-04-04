@@ -1,6 +1,8 @@
 #include "Ball.h"
 
-
+Ball::Ball(){
+	
+}
 Ball::Ball(double radius)
 {
  	location.y = radius;

@@ -9,6 +9,12 @@
 #include <string>
 #include <vector>
 #include <cmath>
+#include "World.h"
+#include "Ball.h"
+#include "Stick.h"
+#include "Camera.h"
+//#include "Stick.cpp"
+//#include "World.cpp"
 
 #define KEY_ESCAPE 27
 #define left_arr 97
@@ -29,98 +35,11 @@ typedef struct {
 	float z_far;
 } glutWindow;
 
-typedef struct point {
-	double x,y,z;
-}point;
+
  
 /*************************************************************************** 
   OBJ Loading 
  ***************************************************************************/
- class Ball
- {
- private:
- 	point location;
- 	point velocity,acc;
- 	double radius;
- public:
-
- 	Ball(double);
- 	void update();
- 	void render();
- 	/* data */
- };
- //**************************************************************
- Ball::Ball(double radius){
- 	location.y = radius;
- 	radius = radius;
- }
- //**************************************************************
- void Ball::update(){
-
- }
- //**************************************************************
- void Ball::render(){
-
- }
- //**************************************************************
- class Stick
- {
- 	point power;
- public:
- 	void setPosition(point);
- 	void setPower(point);
- 	void update();
- 	/* data */
- };
- void Stick::update(){
-
- }
-
- //**************************************************************
- void Stick::render(){
-
- }
-  //**************************************************************
- class Camera
- {
- public:
- 	Camera(arguments);
- 	void update();
- 	void render();
- 	/* data */
- };
-
- //**************************************************************
- void Camera::render(){
-
- }
- //**************************************************************
- class World
- {
- 	Ball ball[15];
- 	Ball qBall;
- 	Camera camera;
- public:
- 	World();
- 	void update();
- 	void render();
- };
- //**************************************************************
- World::World(){
- 	// set all initial declaration
- }
- //**************************************************************
- void World::update(){
- 	for (int i = 0; i < 15; ++i)
- 	{
- 		ball[i].update();
- 	}
- }
-
- //**************************************************************
- void World::render(){
-
- }
  //**************************************************************
 
 class Model_OBJ
@@ -296,52 +215,53 @@ glutWindow win;
 int currMousePosX,currMousePosY,camPosX=0,camPosY=50;
 Model_OBJ obj,coloumn;
 float Rotation;
+World *world;
 point velocity,pos,gravity,pos_cube,vel_cube;
+double xmin=-60,xmax=60,zmin=-60,zmax=60;
 int _floor=-10,rot=0;
 //**************************************************************
 void display() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);		     // Clear Screen and Depth Buffer
 	glLoadIdentity();
 	//cam position update
-	gluLookAt( camPosX,0,camPosY, camPosX+(currMousePosX-win.width/2)/2,(-currMousePosY+win.height/2)/2,camPosY-50, 0,1,0);	 // Define a viewing transformation
+	gluLookAt( camPosX,30,camPosY, camPosX+(currMousePosX-win.width/2)/2,(-currMousePosY+win.height/2)/2,camPosY-50, 0,1,0);	 // Define a viewing transformation
 	//que ball update
-	glPushMatrix();										  // Push the current matrix stack
-		glColor3f(0.01,0.01,0.1);
-		glTranslatef(pos.x,pos.y,pos.z);
-		glTranslatef(0,0,0);				
-		glRotatef(-90,1,0,0);
-		glRotatef(rot,0,0,1);
-		glScalef(0.002,0.002,0.002);
-	    obj.Draw();							  // render a wire­frame teapot respectively. 
-	glPopMatrix();										  // Pop the current matrix stack
+									  // Pop the current matrix stack
 	//general ball update
-	for (std::vector<>::iterator i = balls.begin(); i != balls.end(); ++i)
-	{
+	//for (int i = 0; i < 15; ++i)
+	//{
+	glPushMatrix();										  // Push the current matrix stack
+		glColor3f(1,0,0);
+		glTranslatef(0,-60,0);  //Multiply the current matrix by a translation matrix
+		glutSolidCube  (120); 
+	glPopMatrix();  // Pop the current matrix stack	
+
 	glPushMatrix();										  // Push the current matrix stack
 		glColor3f(1,1,0);
-		glTranslatef(pos_cube.x,pos_cube.y,0);  //Multiply the current matrix by a translation matrix
-		glutSolidSphere  (i->radious); 
+		glTranslatef(pos.x,1.2,pos.z);  //Multiply the current matrix by a translation matrix
+		glutSolidSphere  (1.2,50,50); 
 	glPopMatrix();  // Pop the current matrix stack		
-	}
+	//}
 	
-		
-	
-	Rotation++;
-	//pos.x += 0.1*velocity.x;
-	//pos.y += 0.1*velocity.y;
-	if (pos.y < _floor ){
-		velocity.y = (-velocity.y-0.3) < 0 ? 0: (-velocity.y-0.3);
-		
-		gravity.y = 0;
+	velocity.x = velocity.x/1.02;
+	velocity.z = velocity.z/1.02; 
+	pos.x += velocity.x;
+	pos.z += velocity.z;
+	if (pos.x < xmin ){
+		pos.x = xmin;
+		velocity.x = -velocity.x/1.02;
 	}
-	else{
-		gravity.y = -0.11;
+	if(pos.x > xmax){
+		pos.x = xmax;
+		velocity.x = -velocity.x/1.02;
 	}
-	pos.z += 0.1*velocity.z;
-	velocity.y += gravity.y;
-	//pos_cube.x += vel_cube.x; 
-	if (pos_cube.x < -20 ){
-		pos_cube.x = 20;
+	if (pos.z < zmin ){
+		pos.z = zmin;
+		velocity.z = -velocity.z/1.02;
+	}
+	if(pos.z > zmax){
+		pos.z = zmax;
+		velocity.z = -velocity.z/1.02;
 	}
 	glutSwapBuffers();
 }
@@ -417,24 +337,25 @@ void mouse ( int key1, int key2, int mousePositionX, int mousePositionY )
 { 
 
 	if(key1 == 0){
-		velocity.x =0;
-		velocity.y =0;
+		velocity.x =mousePositionX/100;
+		velocity.z =mousePositionY/100;
 		pos.x =0;
 		pos.z =0;
 		pos.y =0;
 	}
-cout << mousePositionX;
+	cout << mousePositionX;
 }
 void myMouseFunc(int x, int y){
 	cout << x << ":" << y << endl;
-currMousePosX = x;
-currMousePosY = y;
+	currMousePosX = x;
+	currMousePosY = y;
 }
 int main(int argc, char **argv) 
 {
 	gravity.y = -0.11; pos_cube.x = 10; pos_cube.y = -5;
 	vel_cube.x = -0.5;
-	pos.x = -8;
+	
+
 	// set window values
 	win.width = 640;
 	win.height = 480;
@@ -454,6 +375,7 @@ int main(int argc, char **argv)
     	glutMouseFunc( mouse ); 
 	glutPassiveMotionFunc(myMouseFunc);
 	initialize();
+	world = new World();
 	//obj.Load("woman.obj");
 	//coloumn.Load("coloumn.obj");
 

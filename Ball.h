@@ -1,15 +1,18 @@
-#include "Game.h"
+ #ifndef BALL_H
+#define BALL_H
+
+ #include "Game.h"
 
  class Ball
  {
- private:
+ public:
  	point location;
  	point velocity,acc;
  	double radius;
- public:
-
+ 	Ball();
  	Ball(double);
  	void update();
  	void render();
  	/* data */
  };
+#endif
