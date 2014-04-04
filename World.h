@@ -2,6 +2,7 @@
 #include "Ball.h"
 #include "Camera.h"
 #include "Stick.h"
+#include<iostream>
 
  class World
  {
