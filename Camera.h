@@ -1,4 +1,4 @@
- 
+#include "Game.h" 
  class Camera
  {
  public:
