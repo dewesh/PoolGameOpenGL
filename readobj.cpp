@@ -214,59 +214,61 @@ glutWindow win;
 int currMousePosX,currMousePosY,camPosX=0,camPosY=50;
 Model_OBJ obj,coloumn;
 float Rotation;
-World *world;
+World world;
 point velocity,pos,gravity,pos_cube,vel_cube;
 double xmin=-60,xmax=60,zmin=-60,zmax=60;
 int _floor=-10,rot=0;
 
 //**************************************************************
-void checkCollisionWithTable(Ball b){
-	if (b.pos.x < xmin ){
-		b.pos.x = xmin;
-		b.velocity.x = -b.velocity.x/1.02;
+void checkCollisionWithTable(){
+	for (int i = 0; i < 15; ++i)
+	{
+		if (world.ball[i].pos.x < xmin ){
+			world.ball[i].pos.x = xmin;
+			world.ball[i].velocity.x = -world.ball[i].velocity.x/1.02;
+		}
+		if(world.ball[i].pos.x > xmax){
+			world.ball[i].pos.x = xmax;
+			world.ball[i].velocity.x = -world.ball[i].velocity.x/1.02;
+		}
+		if (world.ball[i].pos.z < zmin ){
+			world.ball[i].pos.z = zmin;
+			world.ball[i].velocity.z = -world.ball[i].velocity.z/1.02;
+		}
+		if(world.ball[i].pos.z > zmax){
+			world.ball[i].pos.z = zmax;
+			world.ball[i].velocity.z = -world.ball[i].velocity.z/1.02;
+		}
 	}
-	if(b.pos.x > xmax){
-		b.pos.x = xmax;
-		b.velocity.x = -b.velocity.x/1.02;
-	}
-	if (b.pos.z < zmin ){
-		b.pos.z = zmin;
-		b.velocity.z = -b.velocity.z/1.02;
-	}
-	if(b.pos.z > zmax){
-		b.pos.z = zmax;
-		b.velocity.z = -b.velocity.z/1.02;
-	}
+	
 }
 //**************************************************************
 void display() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);		     // Clear Screen and Depth Buffer
 	glLoadIdentity();
 	//cam position update
-	gluLookAt( camPosX,30,camPosY, camPosX+(currMousePosX-win.width/2)/2,(-currMousePosY+win.height/2)/2,camPosY-50, 0,1,0);	 // Define a viewing transformation
+	gluLookAt( camPosX,60,camPosY, camPosX+(currMousePosX-win.width/2)/2,(-currMousePosY+win.height/2)/2,camPosY-50, 0,1,0);	 // Define a viewing transformation
 	//que ball update
 									  // Pop the current matrix stack
 	//general ball update
-	//for (int i = 0; i < 15; ++i)
-	//{
+	
 	glPushMatrix();										  // Push the current matrix stack
 		glColor3f(1,0,0);
 		glTranslatef(0,-60,0);  //Multiply the current matrix by a translation matrix
 		glutSolidCube  (120); 
 	glPopMatrix();  // Pop the current matrix stack	
 
-	glPushMatrix();										  // Push the current matrix stack
-		glColor3f(1,1,0);
-		glTranslatef(pos.x,1.2,pos.z);  //Multiply the current matrix by a translation matrix
-		glutSolidSphere  (1.2,50,50); 
-	glPopMatrix();  // Pop the current matrix stack		
-	//}
-	
-	velocity.x = velocity.x/1.02;
-	velocity.z = velocity.z/1.02; 
-	pos.x += velocity.x;
-	pos.z += velocity.z;
-	
+	for (int i = 0; i < 15; ++i)
+	{
+		glPushMatrix();										  // Push the current matrix stack
+			glColor3f(1,1,0);
+			glTranslatef(world.ball[i].pos.x,world.ball[i].pos.y,world.ball[i].pos.z);  //Multiply the current matrix by a translation matrix
+			glutSolidSphere  (world.ball[i].radius,50,50); 
+		glPopMatrix();  // Pop the current matrix stack
+	}
+	world.update();
+	checkCollisionWithTable();
+
 	glutSwapBuffers();
 }
 
@@ -341,11 +343,15 @@ void mouse ( int key1, int key2, int mousePositionX, int mousePositionY )
 { 
 
 	if(key1 == 0){
-		velocity.x =mousePositionX/100;
-		velocity.z =mousePositionY/100;
-		pos.x =0;
-		pos.z =0;
-		pos.y =0;
+		for (int i = 0; i < 15; ++i)
+		{
+		world.ball[i].velocity.x =mousePositionX/100*(i+1)*0.1;
+		world.ball[i].velocity.z =mousePositionY/100*(i+2)*0.1;
+		world.ball[i].pos.x =0;
+		world.ball[i].pos.z =0;
+		//world.ball[i].pos.y =0;
+		}
+		
 	}
 	cout << mousePositionX;
 }
@@ -356,10 +362,6 @@ void myMouseFunc(int x, int y){
 }
 int main(int argc, char **argv) 
 {
-	gravity.y = -0.11; pos_cube.x = 10; pos_cube.y = -5;
-	vel_cube.x = -0.5;
-	
-
 	// set window values
 	win.width = 640;
 	win.height = 480;
@@ -379,7 +381,6 @@ int main(int argc, char **argv)
     	glutMouseFunc( mouse ); 
 	glutPassiveMotionFunc(myMouseFunc);
 	initialize();
-	world = new World();
 	//obj.Load("woman.obj");
 	//coloumn.Load("coloumn.obj");
 

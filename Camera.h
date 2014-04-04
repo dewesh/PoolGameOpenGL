@@ -8,8 +8,6 @@
  public:
  	Camera();
  	void update();
- 	void render();
- 	/* data */
  };
 #endif
  

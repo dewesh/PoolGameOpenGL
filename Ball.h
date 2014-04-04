@@ -12,7 +12,6 @@
  	Ball();
  	Ball(double);
  	void update();
- 	void render();
- 	/* data */
+ 	void reset();
  };
 #endif

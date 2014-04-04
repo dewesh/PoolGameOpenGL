@@ -9,7 +9,6 @@
  public:
  	void setPosition(point);
  	void setPower(point);
- 	void render();
  	void update();
  	/* data */
  };
