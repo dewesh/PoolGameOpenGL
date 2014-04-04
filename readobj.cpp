@@ -13,8 +13,6 @@
 #include "Ball.h"
 #include "Stick.h"
 #include "Camera.h"
-//#include "Stick.cpp"
-//#include "World.cpp"
 
 #define KEY_ESCAPE 27
 #define left_arr 97
@@ -211,6 +209,7 @@ void Model_OBJ::Draw()
 	glDisableClientState(GL_NORMAL_ARRAY);						// Disable normal arrays
 }
  //**************************************************************************
+
 glutWindow win;
 int currMousePosX,currMousePosY,camPosX=0,camPosY=50;
 Model_OBJ obj,coloumn;
@@ -219,6 +218,26 @@ World *world;
 point velocity,pos,gravity,pos_cube,vel_cube;
 double xmin=-60,xmax=60,zmin=-60,zmax=60;
 int _floor=-10,rot=0;
+
+//**************************************************************
+void checkCollisionWithTable(Ball b){
+	if (b.pos.x < xmin ){
+		b.pos.x = xmin;
+		b.velocity.x = -b.velocity.x/1.02;
+	}
+	if(b.pos.x > xmax){
+		b.pos.x = xmax;
+		b.velocity.x = -b.velocity.x/1.02;
+	}
+	if (b.pos.z < zmin ){
+		b.pos.z = zmin;
+		b.velocity.z = -b.velocity.z/1.02;
+	}
+	if(b.pos.z > zmax){
+		b.pos.z = zmax;
+		b.velocity.z = -b.velocity.z/1.02;
+	}
+}
 //**************************************************************
 void display() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);		     // Clear Screen and Depth Buffer
@@ -247,22 +266,7 @@ void display() {
 	velocity.z = velocity.z/1.02; 
 	pos.x += velocity.x;
 	pos.z += velocity.z;
-	if (pos.x < xmin ){
-		pos.x = xmin;
-		velocity.x = -velocity.x/1.02;
-	}
-	if(pos.x > xmax){
-		pos.x = xmax;
-		velocity.x = -velocity.x/1.02;
-	}
-	if (pos.z < zmin ){
-		pos.z = zmin;
-		velocity.z = -velocity.z/1.02;
-	}
-	if(pos.z > zmax){
-		pos.z = zmax;
-		velocity.z = -velocity.z/1.02;
-	}
+	
 	glutSwapBuffers();
 }
 

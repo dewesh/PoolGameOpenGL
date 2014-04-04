@@ -6,7 +6,7 @@
  class Ball
  {
  public:
- 	point location;
+ 	point pos;
  	point velocity,acc;
  	double radius;
  	Ball();

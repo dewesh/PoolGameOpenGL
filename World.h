@@ -12,7 +12,6 @@
  	Ball ball[15];
  	Ball qBall;
  	Camera camera;
- 	World();
  	void update();
  	void render();
  };

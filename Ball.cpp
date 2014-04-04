@@ -5,7 +5,7 @@ Ball::Ball(){
 }
 Ball::Ball(double radius)
 {
- 	location.y = radius;
+ 	pos.y = radius;
  	radius = radius;
 }
  
