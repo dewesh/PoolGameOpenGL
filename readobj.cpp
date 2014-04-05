@@ -265,19 +265,27 @@ void display() {
 	//cam position update
 	gluLookAt( camPosX,60,camPosY, camPosX+(currMousePosX-win.width/2)/2,(-currMousePosY+win.height/2)/2,camPosY-50, 0,1,0);	 // Define a viewing transformation
 									  // Pop the current matrix stack
-	//general ball update
-	
+	// the current table
 	glPushMatrix();										  // Push the current matrix stack
 		glColor3f(1,0,0);
 		glTranslatef(0,-60,0);  //Multiply the current matrix by a translation matrix
 		glutSolidCube  (120); 
 	glPopMatrix();  // Pop the current matrix stack	
+   // current floor
+	glPushMatrix();										  // Push the current matrix stack
+		glColor3f(0,0,1);
+		glTranslatef(0,-504,0);  //Multiply the current matrix by a translation matrix
+		glutSolidCube  (1000); 
+	glPopMatrix();  // Pop the current matrix stack	
+	
 	//que ball update
 	glPushMatrix();										  // Push the current matrix stack
 		glColor3f(1,1,1);
 		glTranslatef(world.qBall.pos.x,world.qBall.pos.y,world.qBall.pos.z);  //Multiply the current matrix by a translation matrix
 		glutSolidSphere  (world.qBall.radius,50,50); 
 	glPopMatrix();  // Pop the current matrix stack
+	
+	//general ball update
 	for (int i = 0; i < 15; ++i)
 	{
 		glPushMatrix();										  // Push the current matrix stack
