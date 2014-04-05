@@ -8,18 +8,19 @@ World::World(){
 	
 	qBall.pos.x = -50;
 	qBall.pos.z = 0;
+	collisionFriction = 1.01;
 	reset();
 }
 
 void World::updateBallCollision(Ball *a, Ball *b,int u,int v)
 {
 	
-	if(!(collisionEntry[u]==v && collisionEntry[v]==u)){
+	if(!( a -> previousCollison == v && b -> previousCollison == u)){
 		if(isCollision(a,b)){
 			
-			printf("Collision : %d:%d,  ,%d:%d\n",collisionEntry[u],u,collisionEntry[v],v);
-			collisionEntry[u]=v;
-			collisionEntry[v]=u;
+			printf("Collision : %d:%d,  ,%d:%d\n",a -> previousCollison,u,b -> previousCollison,v);
+			a -> previousCollison = v;
+			b -> previousCollison = u;
 				//update b1 and b2
 			double alongB1,alongB2,normalB1,normalB2;
 			double cosPhi,sinPhi;
@@ -36,10 +37,10 @@ void World::updateBallCollision(Ball *a, Ball *b,int u,int v)
 			alongB2 = alongB1;
 			alongB1 = temp;
 			//change to x and y
-			a->velocity.x = alongB1*cosPhi + normalB1*sinPhi;
-			a->velocity.z = -alongB1*sinPhi + normalB1*cosPhi;
-			b->velocity.x = alongB2*cosPhi + normalB2*sinPhi;
-			b->velocity.z = -alongB2*sinPhi + normalB2*cosPhi;
+			a->velocity.x = (alongB1*cosPhi + normalB1*sinPhi)/collisionFriction ;
+			a->velocity.z = (-alongB1*sinPhi + normalB1*cosPhi)/collisionFriction;
+			b->velocity.x = (alongB2*cosPhi + normalB2*sinPhi)/collisionFriction;
+			b->velocity.z = (-alongB2*sinPhi + normalB2*cosPhi)/collisionFriction;
 
 		}
 	}
@@ -67,12 +68,9 @@ void World::updateBallCollision(Ball *a, Ball *b,int u,int v)
 	{
 		ball[i].pos.x = i*3;
 		ball[i].pos.z = i*3;
+		ball[i].reset();
 	}
-	int k;
- 	for(k=0;k<16;k++)
- 	{
- 		collisionEntry[k]=-1;
- 	}
+	qBall.reset();
  }
 //**************************************************************
  double World::getCosPhi(Ball b1,Ball b2){

@@ -220,41 +220,26 @@ double xmin=-60,xmax=60,zmin=-60,zmax=60;
 int _floor=-10,rot=0;
 
 //**************************************************************
-void checkCollisionWithTable(){
-	for (int i = 0; i < 15; ++i)
-	{
-		if (world.ball[i].pos.x < xmin ){
-			world.ball[i].pos.x = xmin;
-			world.ball[i].velocity.x = -world.ball[i].velocity.x/1.02;
-		}
-		if(world.ball[i].pos.x > xmax){
-			world.ball[i].pos.x = xmax;
-			world.ball[i].velocity.x = -world.ball[i].velocity.x/1.02;
-		}
-		if (world.ball[i].pos.z < zmin ){
-			world.ball[i].pos.z = zmin;
-			world.ball[i].velocity.z = -world.ball[i].velocity.z/1.02;
-		}
-		if(world.ball[i].pos.z > zmax){
-			world.ball[i].pos.z = zmax;
-			world.ball[i].velocity.z = -world.ball[i].velocity.z/1.02;
-		}
+void checkCollisionWithTable(Ball *b){
+	if (b->pos.x < xmin ){
+		b->pos.x = xmin;
+		b->velocity.x = -(b->velocity.x)/1.02;
+		b -> previousCollison = -1;
 	}
-	if (world.qBall.pos.x < xmin ){
-		world.qBall.pos.x = xmin;
-		world.qBall.velocity.x = -world.qBall.velocity.x;
+	if(b->pos.x > xmax){
+		b->pos.x = xmax;
+		b->velocity.x = -(b->velocity.x)/1.02;
+		b -> previousCollison = -1;
 	}
-	if(world.qBall.pos.x > xmax){
-		world.qBall.pos.x = xmax;
-		world.qBall.velocity.x = -world.qBall.velocity.x;
+	if (b->pos.z < zmin ){
+		b->pos.z = zmin;
+		b->velocity.z = -(b->velocity.z)/1.02;
+		b -> previousCollison = -1;
 	}
-	if (world.qBall.pos.z < zmin ){
-		world.qBall.pos.z = zmin;
-		world.qBall.velocity.z = -world.qBall.velocity.z;
-	}
-	if(world.qBall.pos.z > zmax){
-		world.qBall.pos.z = zmax;
-		world.qBall.velocity.z = -world.qBall.velocity.z;
+	if(b->pos.z > zmax){
+		b->pos.z = zmax;
+		b->velocity.z = -(b->velocity.z)/1.02;
+		b -> previousCollison = -1;
 	}
 	
 }
@@ -295,8 +280,11 @@ void display() {
 		glPopMatrix();  // Pop the current matrix stack
 	}
 	world.update();
-	checkCollisionWithTable();
-
+	for (int i = 0; i < 15; ++i)
+	{
+		checkCollisionWithTable(&world.ball[i]);
+	}
+	checkCollisionWithTable(&world.qBall);
 	glutSwapBuffers();
 }
 
@@ -372,8 +360,8 @@ void mouse ( int key1, int key2, int mousePositionX, int mousePositionY )
 
 	if(key1 == 0){
 		world.reset();
-		world.qBall.velocity.x =mousePositionX/100;
-		world.qBall.velocity.z =mousePositionY/100;
+		world.qBall.velocity.x =(mousePositionX-win.width/2)/100;
+		world.qBall.velocity.z =(mousePositionY-win.height/2)/100;
 		
 	}
 	//cout << mousePositionX;

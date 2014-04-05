@@ -5,6 +5,7 @@ Ball::Ball(){
 	pos.y = radius;
 	pos.x = 0;
 	pos.z = 0;
+	previousCollison = -1;
 }
 Ball::Ball(double radius)
 {
@@ -22,5 +23,9 @@ void Ball::update()
 }
 
 void Ball::reset(){
+	velocity.x = 0;
+	velocity.z = 0;
+	velocity.y = 0;
+	previousCollison = -1;
 
 }

@@ -14,7 +14,7 @@
  	Ball qBall;
  	Camera camera;
  	Stick stick;
- 	int collisionEntry[16];
+ 	double collisionFriction;	// ball ball collision
  	World();
  	void update();
  	void reset();
