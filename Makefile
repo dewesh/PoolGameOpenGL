@@ -23,3 +23,6 @@ libBall.a: Ball.o
 	ar -rcs libBall.a Ball.o
 Ball.o: Ball.cpp Ball.h Game.h
 	g++ -Wall -c Ball.cpp
+
+clean:
+	rm *.o a.out *.a
