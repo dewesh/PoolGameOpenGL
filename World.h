@@ -18,7 +18,8 @@
  	void update();
  	void reset();
  	double getCosPhi(Ball,Ball);
- 	bool isCollision(Ball,Ball);
+ 	bool isCollision(Ball *,Ball *);
+ 	void updateBallCollision(Ball *, Ball *);
  };
 
 #endif
