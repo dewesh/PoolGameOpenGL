@@ -1,17 +1,14 @@
 #include "World.h"
 #include<math.h>
 #include<stdio.h>
-int collisionEntry[16];
+
 
 
 World::World(){
-	for (int i = 0; i < 15; ++i)
-	{
-		ball[i].pos.x = i*2;
-		ball[i].pos.z = i*2;
-	}
-	qBall.pos.x = -10;
+	
+	qBall.pos.x = -50;
 	qBall.pos.z = 0;
+	reset();
 }
 
 void World::updateBallCollision(Ball *a, Ball *b,int u,int v)
@@ -19,10 +16,10 @@ void World::updateBallCollision(Ball *a, Ball *b,int u,int v)
 	
 	if(!(collisionEntry[u]==v && collisionEntry[v]==u)){
 		if(isCollision(a,b)){
-	
+			
+			printf("Collision : %d:%d,  ,%d:%d\n",collisionEntry[u],u,collisionEntry[v],v);
 			collisionEntry[u]=v;
 			collisionEntry[v]=u;
-			printf("Collision : %d %d\n",u,v);
 				//update b1 and b2
 			double alongB1,alongB2,normalB1,normalB2;
 			double cosPhi,sinPhi;
@@ -48,16 +45,9 @@ void World::updateBallCollision(Ball *a, Ball *b,int u,int v)
 	}
 }
 
-
+//**************************************************************
  void World::update(){
  	qBall.update();
- 	int k;
- 	for(k=0;k<16;k++)
- 	{
- 	collisionEntry[k]=-1;
- 	}
- 	
- 	
  	for (int i = 0; i < 15; ++i)
  	{
  		ball[i].update();
@@ -71,21 +61,26 @@ void World::updateBallCollision(Ball *a, Ball *b,int u,int v)
  	stick.update();
  	qBall.update();
  }
- 
+ //**************************************************************
  void World::reset(){
  	for (int i = 0; i < 15; ++i)
 	{
-		ball[i].pos.x = i*2;
-		ball[i].pos.z = i*2;
+		ball[i].pos.x = i*3;
+		ball[i].pos.z = i*3;
 	}
+	int k;
+ 	for(k=0;k<16;k++)
+ 	{
+ 		collisionEntry[k]=-1;
+ 	}
  }
-
+//**************************************************************
  double World::getCosPhi(Ball b1,Ball b2){
  	double dist;
  	dist = ((b2.pos.x-b1.pos.x)*(b2.pos.x-b1.pos.x)) + ((b2.pos.y-b1.pos.y)*(b2.pos.y-b1.pos.y)) + ((b2.pos.z-b1.pos.z)*(b2.pos.z-b1.pos.z));
  	return (b1.pos.x-b2.pos.x)/sqrt(dist);
  }
-
+//**************************************************************
 bool World::isCollision(Ball *b1,Ball *b2){
 	double dist,requiredDist;
 	double nextPredictDistance;
