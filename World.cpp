@@ -78,6 +78,30 @@ void World::updateBallCollision(Ball *a, Ball *b,int u,int v)
  	}
  	else if (_STATE == RUNNING)
  	{
+ 		
+	 
+ 		std::cout << "RUNNING" << std::endl ;
+ 		for (int i = 0; i < 15; ++i)
+ 		{
+ 			if(qBall.velocity.x <= 0.005 && qBall.velocity.x >= -0.005 && qBall.velocity.z <= 0.005 && qBall.velocity.z >= -0.005){
+	 			ball[i].velocity.x = 0;
+	 			ball[i].velocity.z = 0;
+	 			_STATE = READY;
+	 			continue;
+	 		}
+	 		_STATE = RUNNING;
+	 		break;
+ 		}
+ 		if(qBall.velocity.x <= 0.005 && qBall.velocity.x >= -0.005 && qBall.velocity.z <= 0.005 && qBall.velocity.z >= -0.05 && _STATE == READY){
+ 			qBall.velocity.x = 0;
+ 			qBall.velocity.z = 0;
+ 		}
+ 		else{
+ 			_STATE = RUNNING;
+ 		}
+ 		//call update
+ 		camera.update();
+	 	qBall.update();
  		for (int i = 0; i < 15; ++i)
 	 	{
 	 		ball[i].update();
@@ -87,14 +111,6 @@ void World::updateBallCollision(Ball *a, Ball *b,int u,int v)
 	 			updateBallCollision(&ball[i],&ball[j],i,j);
 	 		}
 	 	}
-	 	camera.update();
-	 	qBall.update();
- 		std::cout << "RUNNING" << std::endl ;
- 		if(qBall.velocity.x <= 0.05 && qBall.velocity.x >= -0.05 && qBall.velocity.z <= 0.05 && qBall.velocity.z >= -0.05){
- 			qBall.velocity.x = 0;
- 			qBall.velocity.z = 0;
- 			_STATE = READY;
- 		}
  	}
  	else if (_STATE == READY)
  	{
