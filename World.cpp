@@ -1,6 +1,7 @@
 #include "World.h"
-#include<math.h>
-#include<stdio.h>
+#include <math.h>
+#include <iostream>
+#include <stdio.h>
 
 
 
@@ -49,18 +50,63 @@ void World::updateBallCollision(Ball *a, Ball *b,int u,int v)
 
 //**************************************************************
  void World::update(){
- 	qBall.update();
- 	for (int i = 0; i < 15; ++i)
+ 	if(_STATE == START){
+ 		reset();
+ 		_STATE = POSITIONSTICK;
+ 		std::cout << "POSITIONSTICK" << std::endl ;
+ 	}
+ 	else if (_STATE == POSITIONSTICK)
  	{
- 		ball[i].update();
- 		updateBallCollision(&qBall,&ball[i],15,i);
- 		for (int j = i+1; j < 15; ++j)
- 		{
- 			updateBallCollision(&ball[i],&ball[j],i,j);
+ 		//click will trigger the hit button
+ 	}
+ 	else if (_STATE == TAKESHOT)
+ 	{
+ 		if(stick.animate() == 0){
+ 			_STATE =HIT;
+ 			std::cout << "HIT" << std::endl ;
+
+ 		}
+ 		
+ 	}
+ 	else if(_STATE == HIT){
+ 		// update queball and change state
+		qBall.velocity.z = -stick.power.z/10;
+		qBall.velocity.x = -stick.power.x/10;
+		stick.reset();
+ 		_STATE = RUNNING;
+ 		std::cout << "RUNNING" << std::endl ;
+ 	}
+ 	else if (_STATE == RUNNING)
+ 	{
+ 		for (int i = 0; i < 15; ++i)
+	 	{
+	 		ball[i].update();
+	 		updateBallCollision(&qBall,&ball[i],15,i);
+	 		for (int j = i+1; j < 15; ++j)
+	 		{
+	 			updateBallCollision(&ball[i],&ball[j],i,j);
+	 		}
+	 	}
+	 	camera.update();
+	 	qBall.update();
+ 		std::cout << "RUNNING" << std::endl ;
+ 		if(qBall.velocity.x <= 0.05 && qBall.velocity.x >= -0.05 && qBall.velocity.z <= 0.05 && qBall.velocity.z >= -0.05){
+ 			qBall.velocity.x = 0;
+ 			qBall.velocity.z = 0;
+ 			_STATE = READY;
  		}
  	}
- 	camera.update();
- 	qBall.update();
+ 	else if (_STATE == READY)
+ 	{
+    	stick.updateTarget(qBall.pos);
+ 		stick.update(0,0);
+ 		std::cout << "RUNNING" << std::endl ;
+
+ 	}
+ 	else{// stopped
+
+ 	}
+ 	
  }
  //**************************************************************
  void World::reset(){

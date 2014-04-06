@@ -1,6 +1,7 @@
 #include "Stick.h"
 #include <math.h>
 #include <iostream>
+
  void Stick::update(int direction,int powerIn){
  	switch(direction){
  		case 0:
@@ -46,8 +47,28 @@
  	pos.x = target.x + power.x;
  	pos.z = target.z + power.z;
  }
-
+//**************************************************************
 void Stick::updateTarget(point p){
 	target = p;
 }
-
+//**************************************************************
+int Stick::animate(){
+	if(count == 10){
+		count = 0;
+		return 0;
+	}
+	else{
+		pos.x -= power.x/10;
+		pos.z -= power.z/10;
+		count ++;
+		return 1;
+	}
+}
+//**************************************************************
+void Stick::reset(){
+	angle = 0 ;
+	pos.x = -1000;
+	pos.z = 0;
+	force = 0;
+	power.x =power.z =0;
+}

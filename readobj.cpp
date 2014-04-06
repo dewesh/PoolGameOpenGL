@@ -336,27 +336,24 @@ void keyboard ( unsigned char key, int mousePositionX, int mousePositionY )
   {
     case left_arr:
 		//camPosX--;
-    	world.stick.updateTarget(world.qBall.pos);
+    	
 		world.stick.update(-1,0);
     	//rot -=1;
     	break;
     case right_arr:
 		// camPosX ++;
     	//rot +=1;
-    	world.stick.updateTarget(world.qBall.pos);
 
     	world.stick.update(1,0);
     	break;
     case up_arr:
 		// camPosY--;
-    	world.stick.updateTarget(world.qBall.pos);
 		
 		world.stick.update(0,1);	
     	//velocity.y +=0.5;
     	break;
     case down_arr:
 		// camPosY++;
-    	world.stick.updateTarget(world.qBall.pos);
 		world.stick.update(0,-1);	
     	//velocity.y -=0.5;
 	    break;
@@ -377,10 +374,7 @@ void mouse ( int key1, int key2, int mousePositionX, int mousePositionY )
 
 	if(key1 == 0){
 		//world.reset();
-		world.qBall.velocity.x = -world.stick.power.x/5;
-		world.qBall.velocity.z = -world.stick.power.z/5;
-
-		
+		world._STATE = TAKESHOT;		
 	}
 	//cout << mousePositionX;
 }

@@ -12,9 +12,12 @@
  	double tipRadius,tailRadius;
  	double angle;
  	double force;
+ 	int count;
  	point pos;
  	void updateTarget(point);
  	void update(int,int); // direction and power
+ 	int animate();
+ 	void reset();
  	/* data */
  };
 #endif

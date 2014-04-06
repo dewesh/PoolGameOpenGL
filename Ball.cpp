@@ -16,8 +16,8 @@ Ball::Ball(double radius)
  
 void Ball::update()
 {
-	velocity.x = velocity.x/1.002;
-	velocity.z = velocity.z/1.002; 
+	velocity.x = velocity.x/1.02;
+	velocity.z = velocity.z/1.02; 
 	pos.x += velocity.x;
 	pos.z += velocity.z;
 }
