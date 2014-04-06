@@ -9,6 +9,7 @@ World::World(){
 	qBall.pos.x = -50;
 	qBall.pos.z = 0;
 	collisionFriction = 1.01;
+	stick.updateTarget(qBall.pos);
 	reset();
 }
 
@@ -59,7 +60,6 @@ void World::updateBallCollision(Ball *a, Ball *b,int u,int v)
  		}
  	}
  	camera.update();
- 	stick.update();
  	qBall.update();
  }
  //**************************************************************

@@ -5,11 +5,16 @@
 
  class Stick
  {
- 	point power;
  public:
- 	void setPosition(point);
- 	void setPower(point);
- 	void update();
+ 	point power;
+ 	point target;
+ 	double length;
+ 	double tipRadius,tailRadius;
+ 	double angle;
+ 	double force;
+ 	point pos;
+ 	void updateTarget(point);
+ 	void update(int,int); // direction and power
  	/* data */
  };
 #endif

@@ -248,7 +248,7 @@ void display() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);		     // Clear Screen and Depth Buffer
 	glLoadIdentity();
 	//cam position update
-	gluLookAt( camPosX,60,camPosY, camPosX+(currMousePosX-win.width/2)/2,(-currMousePosY+win.height/2)/2,camPosY-50, 0,1,0);	 // Define a viewing transformation
+	gluLookAt( camPosX,80,camPosY+20, camPosX+(currMousePosX-win.width/2)/2,(-currMousePosY+win.height/2)/2,camPosY-50, 0,1,0);	 // Define a viewing transformation
 									  // Pop the current matrix stack
 	// the current table
 	glPushMatrix();										  // Push the current matrix stack
@@ -262,7 +262,14 @@ void display() {
 		glTranslatef(0,-504,0);  //Multiply the current matrix by a translation matrix
 		glutSolidCube  (1000); 
 	glPopMatrix();  // Pop the current matrix stack	
-	
+	//current stick
+	glPushMatrix();										  // Push the current matrix stack
+		GLUquadricObj *quadratic;
+  		quadratic = gluNewQuadric();
+  		glTranslatef(world.stick.pos.x,world.qBall.radius,world.stick.pos.z);
+  		glRotatef(world.stick.angle,0,1,0);
+  		gluCylinder(quadratic,0.2f,0.5f,30.0f,32,32);
+	glPopMatrix();  // Pop the current matrix stack	
 	//que ball update
 	glPushMatrix();										  // Push the current matrix stack
 		glColor3f(1,1,1);
@@ -328,30 +335,40 @@ void keyboard ( unsigned char key, int mousePositionX, int mousePositionY )
   switch ( key ) 
   {
     case left_arr:
-camPosX--;
+		//camPosX--;
+    	world.stick.updateTarget(world.qBall.pos);
+		world.stick.update(-1,0);
     	//rot -=1;
     	break;
     case right_arr:
-camPosX ++;
+		// camPosX ++;
     	//rot +=1;
+    	world.stick.updateTarget(world.qBall.pos);
+
+    	world.stick.update(1,0);
     	break;
     case up_arr:
-camPosY--;
+		// camPosY--;
+    	world.stick.updateTarget(world.qBall.pos);
+		
+		world.stick.update(0,1);	
     	//velocity.y +=0.5;
     	break;
     case down_arr:
-camPosY++;
+		// camPosY++;
+    	world.stick.updateTarget(world.qBall.pos);
+		world.stick.update(0,-1);	
     	//velocity.y -=0.5;
-    	    break;
+	    break;
     case space:
-	//velocity.y = 3;
-	break;
+		//velocity.y = 3;
+		break;
     case KEY_ESCAPE:        
-      exit ( 0 );   
-      break;      
+    	exit ( 0 );   
+	    break;      
 
     default:      
-      break;
+	    break;
   }
 }
 
@@ -359,15 +376,16 @@ void mouse ( int key1, int key2, int mousePositionX, int mousePositionY )
 { 
 
 	if(key1 == 0){
-		world.reset();
-		world.qBall.velocity.x =(mousePositionX-win.width/2)/100;
-		world.qBall.velocity.z =(mousePositionY-win.height/2)/100;
+		//world.reset();
+		world.qBall.velocity.x = -world.stick.power.x/5;
+		world.qBall.velocity.z = -world.stick.power.z/5;
+
 		
 	}
 	//cout << mousePositionX;
 }
 void myMouseFunc(int x, int y){
-	cout << x << ":" << y << endl;
+	//cout << x << ":" << y << endl;
 	currMousePosX = x;
 	currMousePosY = y;
 }

@@ -10,6 +10,7 @@
  {
  	
  public:
+ 	enum STATE _STATE;
  	Ball ball[15];
  	Ball qBall;
  	Camera camera;
@@ -20,7 +21,6 @@
  	void reset();
  	double getCosPhi(Ball,Ball);
  	bool isCollision(Ball *,Ball *);
- 	
  	void updateBallCollision(Ball *, Ball *,int ,int);
  };
 

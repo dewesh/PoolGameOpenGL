@@ -2,7 +2,8 @@
 #define BALL_H
 
  #include "Game.h"
-
+#define PlayerTurn -1
+#define BallRolling 1
  class Ball
  {
  public:
