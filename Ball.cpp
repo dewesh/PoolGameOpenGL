@@ -1,7 +1,7 @@
 #include "Ball.h"
 
 Ball::Ball(){
-	radius = 1.2;
+	radius = 3;
 	pos.y = radius;
 	pos.x = 0;
 	pos.z = 0;

@@ -6,11 +6,17 @@
 
 
 World::World(){
-	
+	camFar = 20;
 	qBall.pos.x = -50;
 	qBall.pos.z = 0;
-	collisionFriction = 1.01;
+	collisionFriction = 1;
 	stick.updateTarget(qBall.pos);
+	stick.update(0,0);
+	point camPos;
+	camPos.x = stick.target.x + stick.length*stick.sinTheta*camFar;
+	camPos.z = stick.target.z + stick.length*stick.cosTheta*camFar;
+	camPos.y = stick.length*camFar;
+	camera = new Camera(camPos,qBall.pos);
 	reset();
 }
 
@@ -25,9 +31,10 @@ void World::updateBallCollision(Ball *a, Ball *b,int u,int v)
 			b -> previousCollison = u;
 				//update b1 and b2
 			double alongB1,alongB2,normalB1,normalB2;
-			double cosPhi,sinPhi;
-			cosPhi = getCosPhi(*a,*b);
-			sinPhi = sqrt(1-pow(cosPhi,2));
+			double cosPhi,sinPhi,Phi;
+			Phi = getPhi(*a,*b);
+			cosPhi = cos(Phi);
+			sinPhi = sin(Phi);
 			alongB2 = b->velocity.x * cosPhi - b->velocity.z * sinPhi;
 			normalB2 = b->velocity.x * sinPhi + b->velocity.z * cosPhi;
 			alongB1 = a->velocity.x * cosPhi - a->velocity.z * sinPhi;
@@ -58,6 +65,14 @@ void World::updateBallCollision(Ball *a, Ball *b,int u,int v)
  	else if (_STATE == POSITIONSTICK)
  	{
  		//click will trigger the hit button
+		point camPos;
+		camPos.x = stick.target.x + stick.length*stick.sinTheta*camFar;
+		camPos.z = stick.target.z + stick.length*stick.cosTheta*camFar;
+		camPos.y = stick.length*camFar;
+		//std::cout << camPos.x << std::endl;
+		camera->setCamera(camPos,qBall.pos);
+		//std::cout << "POSITIONSTICK" << std::endl ;
+
  	}
  	else if (_STATE == TAKESHOT)
  	{
@@ -80,7 +95,7 @@ void World::updateBallCollision(Ball *a, Ball *b,int u,int v)
  	{
  		
 	 
- 		std::cout << "RUNNING" << std::endl ;
+ 		//std::cout << "RUNNING" << std::endl ;
  		for (int i = 0; i < 15; ++i)
  		{
  			if(qBall.velocity.x <= 0.005 && qBall.velocity.x >= -0.005 && qBall.velocity.z <= 0.005 && qBall.velocity.z >= -0.005){
@@ -100,7 +115,6 @@ void World::updateBallCollision(Ball *a, Ball *b,int u,int v)
  			_STATE = RUNNING;
  		}
  		//call update
- 		camera.update();
 	 	qBall.update();
  		for (int i = 0; i < 15; ++i)
 	 	{
@@ -116,7 +130,9 @@ void World::updateBallCollision(Ball *a, Ball *b,int u,int v)
  	{
     	stick.updateTarget(qBall.pos);
  		stick.update(0,0);
- 		std::cout << "RUNNING" << std::endl ;
+ 		qBall.previousCollison = -1;
+ 		_STATE = POSITIONSTICK;
+ 		std::cout << "READY" << std::endl ;
 
  	}
  	else{// stopped
@@ -128,17 +144,28 @@ void World::updateBallCollision(Ball *a, Ball *b,int u,int v)
  void World::reset(){
  	for (int i = 0; i < 15; ++i)
 	{
-		ball[i].pos.x = i*3;
-		ball[i].pos.z = i*3;
+		ball[i].pos.x = i*5;
+		ball[i].pos.z = i*5;
 		ball[i].reset();
 	}
 	qBall.reset();
+	stick.update(0,0);
+	point camPos;
+	camPos.x = stick.target.x + stick.length*stick.sinTheta*camFar;
+	camPos.z = stick.target.z + stick.length*stick.cosTheta*camFar;
+	camPos.y = stick.length*camFar;
+
+	camera->setCamera(camPos,qBall.pos);
  }
 //**************************************************************
- double World::getCosPhi(Ball b1,Ball b2){
- 	double dist;
- 	dist = ((b2.pos.x-b1.pos.x)*(b2.pos.x-b1.pos.x)) + ((b2.pos.y-b1.pos.y)*(b2.pos.y-b1.pos.y)) + ((b2.pos.z-b1.pos.z)*(b2.pos.z-b1.pos.z));
- 	return (b1.pos.x-b2.pos.x)/sqrt(dist);
+ double World::getPhi(Ball b1,Ball b2){
+ 	//double dist;
+ 	//dist = ((b2.pos.x-b1.pos.x)*(b2.pos.x-b1.pos.x)) + ((b2.pos.y-b1.pos.y)*(b2.pos.y-b1.pos.y)) + ((b2.pos.z-b1.pos.z)*(b2.pos.z-b1.pos.z));
+ 	double phi;
+ 	phi = atan2(b2.pos.z - b1.pos.z  , - b2.pos.x + b1.pos.x);
+ 	std::cout << phi << std::endl;
+ 	// return (b1.pos.x-b2.pos.x)/sqrt(dist);
+ 	return phi;
  }
 //**************************************************************
 bool World::isCollision(Ball *b1,Ball *b2){

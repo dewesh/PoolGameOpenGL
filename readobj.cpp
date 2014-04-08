@@ -216,29 +216,29 @@ Model_OBJ obj,coloumn;
 float Rotation;
 World world;
 point velocity,pos,gravity,pos_cube,vel_cube;
-double xmin=-60,xmax=60,zmin=-60,zmax=60;
+double xmin=-100,xmax=100,zmin=-100,zmax=100;
 int _floor=-10,rot=0;
 
 //**************************************************************
 void checkCollisionWithTable(Ball *b){
-	if (b->pos.x < xmin ){
-		b->pos.x = xmin;
-		b->velocity.x = -(b->velocity.x)/1.02;
+	if (b->pos.x < xmin+b->radius ){
+		b->pos.x = xmin+b->radius;
+		b->velocity.x = -(b->velocity.x);
 		b -> previousCollison = -1;
 	}
-	if(b->pos.x > xmax){
-		b->pos.x = xmax;
-		b->velocity.x = -(b->velocity.x)/1.02;
+	if(b->pos.x > xmax-b->radius){
+		b->pos.x = xmax-b->radius;
+		b->velocity.x = -(b->velocity.x);
 		b -> previousCollison = -1;
 	}
-	if (b->pos.z < zmin ){
-		b->pos.z = zmin;
-		b->velocity.z = -(b->velocity.z)/1.02;
+	if (b->pos.z < zmin+b->radius ){
+		b->pos.z = zmin+b->radius;
+		b->velocity.z = -(b->velocity.z);
 		b -> previousCollison = -1;
 	}
-	if(b->pos.z > zmax){
-		b->pos.z = zmax;
-		b->velocity.z = -(b->velocity.z)/1.02;
+	if(b->pos.z > zmax-b->radius){
+		b->pos.z = zmax-b->radius;
+		b->velocity.z = -(b->velocity.z);
 		b -> previousCollison = -1;
 	}
 	
@@ -247,28 +247,38 @@ void checkCollisionWithTable(Ball *b){
 void display() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);		     // Clear Screen and Depth Buffer
 	glLoadIdentity();
+	// GLfloat position1[] = { 00.0, 100.0, 00.0, 1.0 };
+	
 	//cam position update
-	gluLookAt( camPosX,80,camPosY+20, camPosX+(currMousePosX-win.width/2)/2,(-currMousePosY+win.height/2)/2,camPosY-50, 0,1,0);	 // Define a viewing transformation
+	gluLookAt( world.camera->cameraFrom.x,world.camera->cameraFrom.y,world.camera->cameraFrom.z, world.camera->cameraTo.x,0,world.camera->cameraTo.z, 0,1,0);	 // Define a viewing transformation
 									  // Pop the current matrix stack
 	// the current table
+	//cout << world.camera->cameraFrom.x << "passing "<<endl;
+	/*glPushMatrix();		
+									  // Push the current matrix stack
+		glLightfv (GL_LIGHT0, GL_POSITION, position1);
+
+	glPopMatrix();  // Pop the current matrix stack	*/
+
 	glPushMatrix();										  // Push the current matrix stack
 		glColor3f(1,0,0);
-		glTranslatef(0,-60,0);  //Multiply the current matrix by a translation matrix
-		glutSolidCube  (120); 
+		glTranslatef(0,-100,0);  //Multiply the current matrix by a translation matrix
+		glutSolidCube  (200); 
 	glPopMatrix();  // Pop the current matrix stack	
    // current floor
-	glPushMatrix();										  // Push the current matrix stack
+	/*glPushMatrix();										  // Push the current matrix stack
 		glColor3f(0,0,1);
 		glTranslatef(0,-504,0);  //Multiply the current matrix by a translation matrix
 		glutSolidCube  (1000); 
-	glPopMatrix();  // Pop the current matrix stack	
+	glPopMatrix();  // Pop the current matrix stack	*/
 	//current stick
-	glPushMatrix();										  // Push the current matrix stack
+	glPushMatrix();		
+		glColor3f(0,0,1);								  // Push the current matrix stack
 		GLUquadricObj *quadratic;
   		quadratic = gluNewQuadric();
   		glTranslatef(world.stick.pos.x,world.qBall.radius,world.stick.pos.z);
   		glRotatef(world.stick.angle,0,1,0);
-  		gluCylinder(quadratic,0.2f,0.5f,30.0f,32,32);
+  		gluCylinder(quadratic,world.qBall.radius*0.2,world.qBall.radius * 0.5,world.qBall.radius*30.0,32,32);
 	glPopMatrix();  // Pop the current matrix stack	
 	//que ball update
 	glPushMatrix();										  // Push the current matrix stack
@@ -336,7 +346,7 @@ void keyboard ( unsigned char key, int mousePositionX, int mousePositionY )
   {
     case left_arr:
 		//camPosX--;
-    	
+    	cout << "lol";
 		world.stick.update(-1,0);
     	//rot -=1;
     	break;

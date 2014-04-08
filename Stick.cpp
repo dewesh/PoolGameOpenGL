@@ -2,6 +2,9 @@
 #include <math.h>
 #include <iostream>
 
+Stick::Stick(){
+	length = 10;
+}
  void Stick::update(int direction,int powerIn){
  	switch(direction){
  		case 0:
@@ -27,7 +30,6 @@
  		default:
  			break;
  	}
- 	double cosTheta,sinTheta;
  	if (angle < 0)
  	{
  		angle += 360;

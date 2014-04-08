@@ -1,9 +1,14 @@
 #include "Camera.h"
 
-Camera::Camera(){
-
+Camera::Camera(point p1, point p2){
+	cameraFrom = p1;
+	cameraTo = p2;
 }
 
-void Camera::update(){
+void Camera::setCamera(point p1, point p2){
+	cameraFrom = p1;
+	cameraTo = p2;
+}
+void Camera::update(int mouseX,int mouseZ){
 
 }

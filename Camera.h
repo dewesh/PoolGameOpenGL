@@ -6,8 +6,11 @@
  class Camera
  {
  public:
- 	Camera();
- 	void update();
+ 	point cameraFrom;
+ 	point cameraTo;
+ 	Camera(point,point);
+ 	void setCamera(point,point);
+ 	void update(int,int);
  };
 #endif
  
