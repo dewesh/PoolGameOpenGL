@@ -17,6 +17,7 @@ World::World(){
 	camPos.z = stick.target.z + stick.length*stick.cosTheta*camFar;
 	camPos.y = stick.length*camFar;
 	camera = new Camera(camPos,qBall.pos);
+	table = new Table(300,150);
 	reset();
 }
 
@@ -85,8 +86,8 @@ void World::updateBallCollision(Ball *a, Ball *b,int u,int v)
  	}
  	else if(_STATE == HIT){
  		// update queball and change state
-		qBall.velocity.z = -stick.power.z/10;
-		qBall.velocity.x = -stick.power.x/10;
+		qBall.velocity.z = -stick.power.z/7;
+		qBall.velocity.x = -stick.power.x/7;
 		stick.reset();
  		_STATE = RUNNING;
  		std::cout << "RUNNING" << std::endl ;

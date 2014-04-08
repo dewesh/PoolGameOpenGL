@@ -1,11 +1,15 @@
-a.out: readobj.cpp libBall.a libWorld.a libCamera.a libStick.a
-	g++ -Wall readobj.cpp -L. -lWorld -lBall -lCamera -lStick -lglut -lGLU
+a.out: readobj.cpp libBall.a libWorld.a libCamera.a libStick.a libTable.a
+	g++ -Wall readobj.cpp -L. -lWorld -lBall -lCamera -lStick -lTable -lglut -lGLU
 
 libWorld.a: World.o
 	ar -rcs libWorld.a World.o
-World.o: World.cpp World.h libCamera.a libStick.a libBall.a
-	g++ -Wall -c World.cpp -L. -lCamera -lStick -lBall
+World.o: World.cpp World.h libCamera.a libStick.a libBall.a libTable.a
+	g++ -Wall -c World.cpp -L. -lCamera -lStick -lBall -lTable
 
+libTable.a: Table.o
+	ar -rcs libTable.a Table.o
+Table.o: Table.cpp Table.h Game.h
+	g++ -Wall -c Table.cpp
 
 libCamera.a: Camera.o
 	ar -rcs libCamera.a Camera.o

@@ -5,6 +5,8 @@
 #include "Camera.h"
 #include "Stick.h"
 #include "Game.h"
+#include "Table.h"
+#include <vector>
  
  class World
  {
@@ -14,6 +16,7 @@
  	Ball ball[15];
  	Ball qBall;
  	Camera *camera;
+ 	Table *table;
  	int camFar;
  	Stick stick;
  	double collisionFriction;	// ball ball collision
