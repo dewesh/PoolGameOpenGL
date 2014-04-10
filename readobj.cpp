@@ -75,17 +75,17 @@ void drawRect(double b,double l){
 }
 //**************************************************************
 void drawTable(Table *t){
-	glPushMatrix();										  // Push the current matrix stack
-		glColor3f(1.0, 1.0, 1.0);
-		glBegin(GL_LINES);
-		for (int i = xmin; i <= xmax; i += 5) {
-			glVertex3f(i, 0, zmax); glVertex3f(i, 0, zmin);
-		}
-		for (int i = zmin; i <= zmax; i += 5) {
-			glVertex3f(xmax, 0, i); glVertex3f(xmin, 0, i);
-		}
-		glEnd();
-	glPopMatrix();  // Pop the current matrix stack	
+	// glPushMatrix();										  // Push the current matrix stack
+	// 	glColor3f(1.0, 1.0, 1.0);
+	// 	glBegin(GL_LINES);
+	// 	for (int i = xmin; i <= xmax; i += 5) {
+	// 		glVertex3f(i, 0, zmax); glVertex3f(i, 0, zmin);
+	// 	}
+	// 	for (int i = zmin; i <= zmax; i += 5) {
+	// 		glVertex3f(xmax, 0, i); glVertex3f(xmin, 0, i);
+	// 	}
+	// 	glEnd();
+	// glPopMatrix();  // Pop the current matrix stack	
 
 	glPushMatrix();				//surface						  
 		glColor3f(0.1,1,0);
@@ -171,6 +171,16 @@ void display() {
 									  // Pop the current matrix stack
 
 	drawTable(world.table);
+	if(world._STATE == POSITIONSTICK){
+		glPushMatrix();										  // Push the current matrix stack
+			glColor3f(1.0, 1.0, 1.0);
+			glTranslatef(world.qBall.pos.x,0,world.qBall.pos.z);
+	  		glRotatef(world.stick.angle,0,1,0);
+			glBegin(GL_LINES);
+				glVertex3f(0, world.qBall.radius, 0); glVertex3f(0, world.qBall.radius, -200);
+			glEnd();
+		glPopMatrix();  //
+	}
 	//current stick
 	glPushMatrix();		
 		glColor3f(0,0.3,0.3);								  // Push the current matrix stack
