@@ -214,6 +214,7 @@ bool World::checkHole(Ball *b1){
 	qBall.pos.x = 0;
 	qBall.pos.z = table->len*0.25;
 	qBall.reset();
+	qBall.pos.y = qBall.radius;
 	qBall.active = true;
 	stick.updateTarget(qBall.pos);
 	stick.update(0,0);
