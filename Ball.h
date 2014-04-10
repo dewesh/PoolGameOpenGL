@@ -10,6 +10,7 @@
  	point velocity,acc;
  	double radius;
  	int previousCollison;
+ 	bool active;
  	Ball();
  	Ball(double);
  	void update();

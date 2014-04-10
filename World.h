@@ -15,6 +15,7 @@
  	enum STATE _STATE;
  	Ball ball[15];
  	Ball qBall;
+ 	Ball holes[4];
  	Camera *camera;
  	Table *table;
  	int camFar;
@@ -25,7 +26,8 @@
  	void reset();
  	double getPhi(Ball,Ball);
  	bool isCollision(Ball *,Ball *);
- 	void updateBallCollision(Ball *, Ball *,int ,int);
+ 	bool checkHole(Ball*);
+ 	bool updateBallCollision(Ball *, Ball *,int ,int);
  };
 
 #endif

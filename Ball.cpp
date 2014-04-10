@@ -6,18 +6,21 @@ Ball::Ball(){
 	pos.x = 0;
 	pos.z = 0;
 	previousCollison = -1;
+	active = true;
 }
 Ball::Ball(double radius)
 {
  	pos.y = radius;
  	radius = radius;
+ 	previousCollison = -1;
+ 	active = true;
 }
  
  
 void Ball::update()
 {
-	velocity.x = velocity.x/1.02;
-	velocity.z = velocity.z/1.02; 
+	velocity.x = velocity.x/1.015;
+	velocity.z = velocity.z/1.015; 
 	pos.x += velocity.x;
 	pos.z += velocity.z;
 }

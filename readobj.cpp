@@ -29,16 +29,9 @@ typedef struct {
 	float z_far;
 } glutWindow;
 
-
- 
-/*************************************************************************** 
-  OBJ Loading 
- ***************************************************************************/
- //**************************************************************
-
 using namespace std;
  
- //**************************************************************************
+//**************************************************************************
 
 glutWindow win;
 int currMousePosX,currMousePosY,camPosX=0,camPosY=50;
@@ -70,7 +63,6 @@ void checkCollisionWithTable(Ball *b){
 		b->velocity.z = -(b->velocity.z);
 		b -> previousCollison = -1;
 	}
-	
 }
 //**************************************************************
 void drawRect(double b,double l){
@@ -80,7 +72,6 @@ void drawRect(double b,double l){
 	glVertex3f(l/2,0,-b/2);
 	glVertex3f(l/2,0,b/2);
 	glEnd();
-
 }
 //**************************************************************
 void drawTable(Table *t){
@@ -102,72 +93,72 @@ void drawTable(Table *t){
 	glPopMatrix();				
 
 		glColor3f(0.5,0.2,0.2);
-//**************************************************************
-	glPushMatrix();				//sidebar	
-		glTranslatef(t->bre/2,t->height/2,0);				  
-		glRotatef(-90,0,0,1);
-        drawRect(t->len+2*t->thickness,t->height);
-	glPopMatrix();				
-	glPushMatrix();				// sidebar	
-		glTranslatef(t->bre/2+t->thickness,t->height/2,0);						  
-		glRotatef(-90,0,0,1);
-        drawRect(t->len+2*t->thickness,t->height);
-	glPopMatrix();
-	glPushMatrix();				// sidebar
-		glTranslatef(-t->bre/2-t->thickness,t->height/2,0);	
-		glRotatef(+90,0,0,1);
-        drawRect(t->len+2*t->thickness,t->height);
-	glPopMatrix();
-	glPushMatrix();				// sidebar	
-		glTranslatef(-t->bre/2,t->height/2,0);							  
-		glRotatef(+90,0,0,1);
-        drawRect(t->len+2*t->thickness,t->height);
-	glPopMatrix();
-//**************************************************************
-	glPushMatrix();				//sidebar	
-		glTranslatef(0,t->height/2,t->len/2);				  
-		glRotatef(-90,1,0,0);
-		glRotatef(-90,0,1,0);
-        drawRect(t->bre+2*t->thickness,t->height);
-	glPopMatrix();				
-	glPushMatrix();				// sidebar	
-		glTranslatef(0,t->height/2,t->len/2+t->thickness);
-		glRotatef(-90,1,0,0);						  
-		glRotatef(-90,0,1,0);
-        drawRect(t->bre+2*t->thickness,t->height);
-	glPopMatrix();
-	glPushMatrix();				// sidebar
-		glTranslatef(0,t->height/2,-t->len/2-t->thickness);	
-		glRotatef(-90,1,0,0);
-		glRotatef(+90,0,1,0);
-        drawRect(t->bre+2*t->thickness,t->height);
-	glPopMatrix();
-	glPushMatrix();				// sidebar	
-		glTranslatef(0,t->height/2,-t->len/2);	
-		glRotatef(-90,1,0,0);						  
-		glRotatef(+90,0,1,0);
-        drawRect(t->bre+2*t->thickness,t->height);
-	glPopMatrix();
-//**************************************************************
-	glPushMatrix();				//topBar	
-		glTranslatef(0,t->height,t->len/2+t->thickness/2);				  
-		glRotatef(90,0,1,0);
-        drawRect(t->bre,t->thickness);
-	glPopMatrix();	
-	glPushMatrix();				// topBar	
-		glTranslatef(0,t->height,-t->len/2-t->thickness/2);	
-		glRotatef(90,0,1,0);
-        drawRect(t->bre,t->thickness);
-	glPopMatrix();			
+	//**************************************************************
+		glPushMatrix();				//sidebar	
+			glTranslatef(t->bre/2,t->height/2,0);				  
+			glRotatef(-90,0,0,1);
+	        drawRect(t->len+2*t->thickness,t->height);
+		glPopMatrix();				
+		glPushMatrix();				// sidebar	
+			glTranslatef(t->bre/2+t->thickness,t->height/2,0);						  
+			glRotatef(-90,0,0,1);
+	        drawRect(t->len+2*t->thickness,t->height);
+		glPopMatrix();
+		glPushMatrix();				// sidebar
+			glTranslatef(-t->bre/2-t->thickness,t->height/2,0);	
+			glRotatef(+90,0,0,1);
+	        drawRect(t->len+2*t->thickness,t->height);
+		glPopMatrix();
+		glPushMatrix();				// sidebar	
+			glTranslatef(-t->bre/2,t->height/2,0);							  
+			glRotatef(+90,0,0,1);
+	        drawRect(t->len+2*t->thickness,t->height);
+		glPopMatrix();
+	//**************************************************************
+		glPushMatrix();				//sidebar	
+			glTranslatef(0,t->height/2,t->len/2);				  
+			glRotatef(-90,1,0,0);
+			glRotatef(-90,0,1,0);
+	        drawRect(t->bre+2*t->thickness,t->height);
+		glPopMatrix();				
+		glPushMatrix();				// sidebar	
+			glTranslatef(0,t->height/2,t->len/2+t->thickness);
+			glRotatef(-90,1,0,0);						  
+			glRotatef(-90,0,1,0);
+	        drawRect(t->bre+2*t->thickness,t->height);
+		glPopMatrix();
+		glPushMatrix();				// sidebar
+			glTranslatef(0,t->height/2,-t->len/2-t->thickness);	
+			glRotatef(-90,1,0,0);
+			glRotatef(+90,0,1,0);
+	        drawRect(t->bre+2*t->thickness,t->height);
+		glPopMatrix();
+		glPushMatrix();				// sidebar	
+			glTranslatef(0,t->height/2,-t->len/2);	
+			glRotatef(-90,1,0,0);						  
+			glRotatef(+90,0,1,0);
+	        drawRect(t->bre+2*t->thickness,t->height);
+		glPopMatrix();
+	//**************************************************************
+		glPushMatrix();				//topBar	
+			glTranslatef(0,t->height,t->len/2+t->thickness/2);				  
+			glRotatef(90,0,1,0);
+	        drawRect(t->bre,t->thickness);
+		glPopMatrix();	
 		glPushMatrix();				// topBar	
-		glTranslatef(-t->bre/2-t->thickness/2,t->height,0);							  
-        drawRect(t->len+2*t->thickness,t->thickness);
-	glPopMatrix();
-	glPushMatrix();				//topBar	
-		glTranslatef(t->bre/2+t->thickness/2,t->height,0);				  
-        drawRect(t->len+2*t->thickness,t->thickness);
-	glPopMatrix();
-//**************************************************************
+			glTranslatef(0,t->height,-t->len/2-t->thickness/2);	
+			glRotatef(90,0,1,0);
+	        drawRect(t->bre,t->thickness);
+		glPopMatrix();			
+			glPushMatrix();				// topBar	
+			glTranslatef(-t->bre/2-t->thickness/2,t->height,0);							  
+	        drawRect(t->len+2*t->thickness,t->thickness);
+		glPopMatrix();
+		glPushMatrix();				//topBar	
+			glTranslatef(t->bre/2+t->thickness/2,t->height,0);				  
+	        drawRect(t->len+2*t->thickness,t->thickness);
+		glPopMatrix();
+	//**************************************************************
 }
 //**************************************************************
 void display() {
@@ -180,13 +171,6 @@ void display() {
 									  // Pop the current matrix stack
 
 	drawTable(world.table);
-	
-   // current floor
-	/*glPushMatrix();										  // Push the current matrix stack
-		glColor3f(0,0,1);
-		glTranslatef(0,-504,0);  //Multiply the current matrix by a translation matrix
-		glutSolidCube  (1000); 
-	glPopMatrix();  // Pop the current matrix stack	*/
 	//current stick
 	glPushMatrix();		
 		glColor3f(0,0,1);								  // Push the current matrix stack
@@ -210,6 +194,15 @@ void display() {
 			glColor3f((double)1/i+1,(double)1/i+1,0);
 			glTranslatef(world.ball[i].pos.x,world.ball[i].pos.y,world.ball[i].pos.z);  //Multiply the current matrix by a translation matrix
 			glutSolidSphere  (world.ball[i].radius,50,50); 
+		glPopMatrix();  // Pop the current matrix stack
+	}
+	//holes
+	for (int i = 0; i < 4; ++i)
+	{
+		glPushMatrix();										  // Push the current matrix stack
+			glColor3f(0,0,0);
+			glTranslatef(world.holes[i].pos.x,world.holes[i].pos.y,world.holes[i].pos.z);  //Multiply the current matrix by a translation matrix
+			glutSolidSphere  (world.holes[i].radius,50,50); 
 		glPopMatrix();  // Pop the current matrix stack
 	}
 	world.update();
@@ -254,32 +247,32 @@ void initialize ()
 	glClearColor(0.0, 0.0, 1.0, 1.0);
 
 }
-
-
+//**************************************************************
 void keyboard ( unsigned char key, int mousePositionX, int mousePositionY )		
 { 
   switch ( key ) 
   {
     case left_arr:
 		//camPosX--;
-    	cout << "lol";
+    	if(world._STATE == POSITIONSTICK)
 		world.stick.update(-1,0);
     	//rot -=1;
     	break;
     case right_arr:
 		// camPosX ++;
     	//rot +=1;
-
+    	if(world._STATE == POSITIONSTICK)
     	world.stick.update(1,0);
     	break;
     case up_arr:
 		// camPosY--;
-		
+    	if(world._STATE == POSITIONSTICK)
 		world.stick.update(0,1);	
     	//velocity.y +=0.5;
     	break;
     case down_arr:
 		// camPosY++;
+    	if(world._STATE == POSITIONSTICK)
 		world.stick.update(0,-1);	
     	//velocity.y -=0.5;
 	    break;
@@ -294,21 +287,23 @@ void keyboard ( unsigned char key, int mousePositionX, int mousePositionY )
 	    break;
   }
 }
-
+//**************************************************************
 void mouse ( int key1, int key2, int mousePositionX, int mousePositionY )		
 { 
 
-	if(key1 == 0){
+	if(key1 == 0 && key2 == 1 && world._STATE == POSITIONSTICK){
 		//world.reset();
 		world._STATE = TAKESHOT;		
 	}
-	//cout << mousePositionX;
+	cout << key2;
 }
+//**************************************************************
 void myMouseFunc(int x, int y){
 	//cout << x << ":" << y << endl;
 	currMousePosX = x;
 	currMousePosY = y;
 }
+//**************************************************************
 int main(int argc, char **argv) 
 {
 	// set window values

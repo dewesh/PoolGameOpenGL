@@ -4,7 +4,7 @@
 #include <stdio.h>
 
 
-
+#define root2 sqrt(2)
 World::World(){
 	camFar = 20;
 	qBall.pos.x = -50;
@@ -18,16 +18,25 @@ World::World(){
 	camPos.y = stick.length*camFar;
 	camera = new Camera(camPos,qBall.pos);
 	table = new Table(300,150);
+	for (int i = 0; i < 4; ++i)
+	{
+		holes[i].radius = 15;
+		holes[i].pos.y = holes[i].radius;
+	}
+	holes[0].pos = table->p1;
+	holes[1].pos = table->p2;
+	holes[2].pos = table->p3;
+	holes[3].pos = table->p4;
 	reset();
 }
 
-void World::updateBallCollision(Ball *a, Ball *b,int u,int v)
+bool World::updateBallCollision(Ball *a, Ball *b,int u,int v)
 {
 	
 	if(!( a -> previousCollison == v && b -> previousCollison == u)){
 		if(isCollision(a,b)){
 			
-			printf("Collision : %d:%d,  ,%d:%d\n",a -> previousCollison,u,b -> previousCollison,v);
+			// printf("Collision : %d:%d,  ,%d:%d\n",a -> previousCollison,u,b -> previousCollison,v);
 			a -> previousCollison = v;
 			b -> previousCollison = u;
 				//update b1 and b2
@@ -51,11 +60,33 @@ void World::updateBallCollision(Ball *a, Ball *b,int u,int v)
 			a->velocity.z = (-alongB1*sinPhi + normalB1*cosPhi)/collisionFriction;
 			b->velocity.x = (alongB2*cosPhi + normalB2*sinPhi)/collisionFriction;
 			b->velocity.z = (-alongB2*sinPhi + normalB2*cosPhi)/collisionFriction;
-
+			return true;
+		}
+		else{
+			return false;
 		}
 	}
 }
-
+//**************************************************************
+bool World::checkHole(Ball *b1){
+	double dist,requiredDist;
+	double nextPredictDistance;
+	bool isPocket = false;
+	if(b1->active)
+	for (int i = 0; i < 4; ++i)
+	{
+		requiredDist = (holes[i].radius);
+		dist = sqrt(((holes[i].pos.x-b1->pos.x)*(holes[i].pos.x-b1->pos.x)) + ((holes[i].pos.y-b1->pos.y)*(holes[i].pos.y-b1->pos.y)) + ((holes[i].pos.z-b1->pos.z)*(holes[i].pos.z-b1->pos.z)));
+		if(dist <= requiredDist){
+			b1->reset();
+			b1->pos.y = -b1->radius*2;
+			b1->active = false;
+			isPocket = true;
+			break;
+		}
+	}
+	return isPocket;
+}
 //**************************************************************
  void World::update(){
  	if(_STATE == START){
@@ -86,22 +117,19 @@ void World::updateBallCollision(Ball *a, Ball *b,int u,int v)
  	}
  	else if(_STATE == HIT){
  		// update queball and change state
-		qBall.velocity.z = -stick.power.z/7;
-		qBall.velocity.x = -stick.power.x/7;
+		qBall.velocity.z = -stick.power.z/5;
+		qBall.velocity.x = -stick.power.x/5;
 		stick.reset();
  		_STATE = RUNNING;
  		std::cout << "RUNNING" << std::endl ;
  	}
  	else if (_STATE == RUNNING)
  	{
- 		
-	 
  		//std::cout << "RUNNING" << std::endl ;
  		for (int i = 0; i < 15; ++i)
  		{
- 			if(qBall.velocity.x <= 0.005 && qBall.velocity.x >= -0.005 && qBall.velocity.z <= 0.005 && qBall.velocity.z >= -0.005){
-	 			ball[i].velocity.x = 0;
-	 			ball[i].velocity.z = 0;
+ 			if(ball[i].velocity.x <= 0.005 && ball[i].velocity.x >= -0.005 && ball[i].velocity.z <= 0.005 && ball[i].velocity.z >= -0.005){
+	 			ball[i].reset();
 	 			_STATE = READY;
 	 			continue;
 	 		}
@@ -109,18 +137,23 @@ void World::updateBallCollision(Ball *a, Ball *b,int u,int v)
 	 		break;
  		}
  		if(qBall.velocity.x <= 0.005 && qBall.velocity.x >= -0.005 && qBall.velocity.z <= 0.005 && qBall.velocity.z >= -0.05 && _STATE == READY){
- 			qBall.velocity.x = 0;
- 			qBall.velocity.z = 0;
+ 			qBall.reset();
  		}
  		else{
  			_STATE = RUNNING;
  		}
  		//call update
 	 	qBall.update();
+		if(checkHole(&qBall)){
+			_STATE = START;
+		}
  		for (int i = 0; i < 15; ++i)
 	 	{
 	 		ball[i].update();
 	 		updateBallCollision(&qBall,&ball[i],15,i);
+	 		if(checkHole(&ball[i])){
+	 			cout << "ball::" << i << " pocketed" <<endl;
+	 		}
 	 		for (int j = i+1; j < 15; ++j)
 	 		{
 	 			updateBallCollision(&ball[i],&ball[j],i,j);
@@ -134,7 +167,6 @@ void World::updateBallCollision(Ball *a, Ball *b,int u,int v)
  		qBall.previousCollison = -1;
  		_STATE = POSITIONSTICK;
  		std::cout << "READY" << std::endl ;
-
  	}
  	else{// stopped
 
@@ -145,11 +177,45 @@ void World::updateBallCollision(Ball *a, Ball *b,int u,int v)
  void World::reset(){
  	for (int i = 0; i < 15; ++i)
 	{
-		ball[i].pos.x = i*5;
-		ball[i].pos.z = i*5;
 		ball[i].reset();
+		ball[i].active = true;
+		ball[i].pos.y = ball[i].radius;
 	}
+	ball[0].pos.x = 0;
+	ball[0].pos.z = -table->len*0.25+ball[0].radius*0.5;
+	ball[1].pos.x = 0;
+	ball[1].pos.z = -table->len*0.25-ball[0].radius*2.2*root2;
+	ball[2].pos.x = 0;
+	ball[2].pos.z = -table->len*0.25-ball[0].radius*4.4*root2;
+	ball[3].pos.x = ball[0].radius*1.1*root2;
+	ball[3].pos.z = -table->len*0.25 -ball[0].radius*1.1*root2;
+	ball[4].pos.x = ball[0].radius*1.1*root2;
+	ball[4].pos.z = -table->len*0.25 -ball[0].radius*3.3*root2;
+	ball[5].pos.x = -ball[0].radius*1.1*root2;
+	ball[5].pos.z = -table->len*0.25 -ball[0].radius*1.1*root2;
+	ball[6].pos.x = -ball[0].radius*1.1*root2;
+	ball[6].pos.z = -table->len*0.25 -ball[0].radius*3.3*root2;
+	ball[7].pos.x = ball[0].radius*2.2*root2;
+	ball[7].pos.z = -table->len*0.25-ball[0].radius*2.2*root2;
+	ball[8].pos.x = ball[0].radius*2.2*root2;
+	ball[8].pos.z = -table->len*0.25-ball[0].radius*4.4*root2;
+	ball[9].pos.x = -ball[0].radius*2.2*root2;
+	ball[9].pos.z = -table->len*0.25-ball[0].radius*2.2*root2;
+	ball[10].pos.x = -ball[0].radius*2.2*root2;
+	ball[10].pos.z = -table->len*0.25-ball[0].radius*4.4*root2;
+	ball[11].pos.x = ball[0].radius*3.3*root2;
+	ball[11].pos.z = -table->len*0.25-ball[0].radius*3.3*root2;
+	ball[12].pos.x = -ball[0].radius*3.3*root2;
+	ball[12].pos.z = -table->len*0.25-ball[0].radius*3.3*root2;
+	ball[13].pos.x = ball[0].radius*4.4*root2;
+	ball[13].pos.z = -table->len*0.25-ball[0].radius*4.4*root2;
+	ball[14].pos.x = -ball[0].radius*4.4*root2;
+	ball[14].pos.z = -table->len*0.25-ball[0].radius*4.4*root2;
+	qBall.pos.x = 0;
+	qBall.pos.z = table->len*0.25;
 	qBall.reset();
+	qBall.active = true;
+	stick.updateTarget(qBall.pos);
 	stick.update(0,0);
 	point camPos;
 	camPos.x = stick.target.x + stick.length*stick.sinTheta*camFar;
@@ -164,7 +230,7 @@ void World::updateBallCollision(Ball *a, Ball *b,int u,int v)
  	//dist = ((b2.pos.x-b1.pos.x)*(b2.pos.x-b1.pos.x)) + ((b2.pos.y-b1.pos.y)*(b2.pos.y-b1.pos.y)) + ((b2.pos.z-b1.pos.z)*(b2.pos.z-b1.pos.z));
  	double phi;
  	phi = atan2(b2.pos.z - b1.pos.z  , - b2.pos.x + b1.pos.x);
- 	std::cout << phi << std::endl;
+ 	// std::cout << phi << std::endl;
  	// return (b1.pos.x-b2.pos.x)/sqrt(dist);
  	return phi;
  }
@@ -172,13 +238,16 @@ void World::updateBallCollision(Ball *a, Ball *b,int u,int v)
 bool World::isCollision(Ball *b1,Ball *b2){
 	double dist,requiredDist;
 	double nextPredictDistance;
-	requiredDist = (b2->radius+b1->radius);
-	//nextPredictDistance = sqrt(pow((b1->velocity.x+b2->velocity.x),2)+pow((b1->velocity.z+b2->velocity.z),2));
-	//requiredDist+=nextPredictDistance;
-	dist = sqrt(((b2->pos.x-b1->pos.x)*(b2->pos.x-b1->pos.x)) + ((b2->pos.y-b1->pos.y)*(b2->pos.y-b1->pos.y)) + ((b2->pos.z-b1->pos.z)*(b2->pos.z-b1->pos.z)));
-	if(dist <= requiredDist){
-		
-		return true;
+	if(b1->active && b2->active){
+		requiredDist = (b2->radius+b1->radius);
+		dist = sqrt(((b2->pos.x-b1->pos.x)*(b2->pos.x-b1->pos.x)) + ((b2->pos.y-b1->pos.y)*(b2->pos.y-b1->pos.y)) + ((b2->pos.z-b1->pos.z)*(b2->pos.z-b1->pos.z)));
+		if(dist <= requiredDist){
+			
+			return true;
+		}
+		else{
+			return false;
+		}
 	}
 	else{
 		return false;
