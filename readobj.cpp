@@ -75,6 +75,59 @@ void drawRect(double b,double l){
 	glVertex3f(l/2,0,b/2);
 	glEnd();
 }
+///////////////////////////////////////////////////////////////////////////////
+// write 2d text using GLUT
+// The projection matrix must be set to orthogonal before call this function.
+///////////////////////////////////////////////////////////////////////////////
+void drawString(const char *str, int x, int y, float color[4], void *font)
+{
+    glPushAttrib(GL_LIGHTING_BIT | GL_CURRENT_BIT); // lighting and color mask
+    glDisable(GL_LIGHTING);     // need to disable lighting for proper text color
+    glDisable(GL_TEXTURE_2D);
+
+    glColor4fv(color);          // set text color
+    glRasterPos2i(x, y);        // place text position
+
+    // loop all characters in the string
+    while(*str)
+    {
+        glutBitmapCharacter(font, *str);
+        ++str;
+    }
+
+    glEnable(GL_TEXTURE_2D);
+    glEnable(GL_LIGHTING);
+    glPopAttrib();
+}
+void showInfo()
+{
+    // backup current model-view matrix
+    glPushMatrix();                     // save current modelview matrix
+    glLoadIdentity();                   // reset modelview matrix
+
+    // set to 2D orthogonal projection
+    glMatrixMode(GL_PROJECTION);        // switch to projection matrix
+    glPushMatrix();                     // save current projection matrix
+    glLoadIdentity();                   // reset projection matrix
+    gluOrtho2D(0, win.width, 0, win.height);  // set to orthogonal projection
+
+    float color[4] = {1, 1, 1, 1};
+
+    stringstream ss;
+    drawString(ss.str().c_str(), 1, win.height-10, color, font);
+    ss.str(""); // clear buffer
+    ss << "Render-To-Texture Time: ms" << ends;
+    drawString(ss.str().c_str(), 1, win.height-(2*10), color, font);
+    ss.str("");
+
+    ss << "Press SPACE to toggle FBO." << ends;
+    drawString(ss.str().c_str(), 1, 1, color, font);
+    // restore projection matrix
+    glPopMatrix();                   // restore to previous projection matrix
+    // restore modelview matrix
+    glMatrixMode(GL_MODELVIEW);      // switch to modelview matrix
+    glPopMatrix();                   // restore to previous modelview matrix
+}
 //**************************************************************
 void drawTable(Table *t){
 	// glPushMatrix();										  // Push the current matrix stack
@@ -165,15 +218,17 @@ void drawTable(Table *t){
 //**************************************************************
 void display() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);		     // Clear Screen and Depth Buffer
-	glMatrixMode(GL_MODELVIEW);
+		glMatrixMode(GL_MODELVIEW);
+	/*glLoadIdentity();
+	
+		glPushMatrix();
+	 sprintf(str, "Player 1 Score: 1, Player 2 Score: 10");
+     glRasterPos2f(0, 0);
+     glutBitmapString(font,(unsigned char*)str);
+	glPopMatrix();
+
+	glMatrixMode(GL_MODELVIEW);*/
 	glLoadIdentity();
-	// GLfloat position1[] = { 00.0, 100.0, 00.0, 1.0 };
-	//glMatrixMode(GL_PROJECTION);
-//glLoadIdentity();
-//glOrtho(12, 133, 1, 122, 10, -100);
-//glLoadIdentity();
-	//cam position update
-	//glPushMatrix();	
 	gluLookAt( world.camera->cameraFrom.x,world.camera->cameraFrom.y,world.camera->cameraFrom.z, world.camera->cameraTo.x,0,world.camera->cameraTo.z, 0,1,0);	 // Define a viewing transformation
 	//glPopMatrix();  //					  // Pop the current matrix stack
 
@@ -246,14 +301,10 @@ void display() {
 		checkCollisionWithTable(&world.ball[i]);
 	}
 	checkCollisionWithTable(&world.qBall);
-		//display score 
-	glPushMatrix();
-	 sprintf(str, "Player 1 Score: 1, Player 2 Score: 10");
-     glRasterPos2f(10, 10);
-     glutBitmapString(font,(unsigned char*)str);
-	glPopMatrix();
+		//display score
+		showInfo(); 
 	glutSwapBuffers();
-
+	glFlush();
 }
 
 
@@ -265,7 +316,7 @@ void initialize ()
     glLoadIdentity();															// reset projection matrix
     GLfloat aspect = (GLfloat) win.width / win.height;
 	gluPerspective(win.field_of_view_angle, aspect, win.z_near, win.z_far);		// set up a perspective projection matrix
-    glMatrixMode(GL_MODELVIEW);													// specify which matrix is the current matrix
+    //glMatrixMode(GL_MODELVIEW);													// specify which matrix is the current matrix
     glShadeModel( GL_SMOOTH );
     glClearDepth( 1.0f );														// specify the clear value for the depth buffer
     glEnable( GL_DEPTH_TEST );
@@ -361,7 +412,7 @@ int main(int argc, char **argv)
 	win.title = "OpenGL/GLUT Window.";
 	win.field_of_view_angle = 45;
 	win.z_near = 1.0f;
-	win.z_far = 500.0f;
+	win.z_far = 5000.0f;
 	xmin = world.table->p2.x;
 	xmax = world.table->p1.x;
 	zmax = world.table->p1.z;
