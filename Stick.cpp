@@ -5,7 +5,7 @@
 Stick::Stick(){
 	length = 10;
 }
- void Stick::update(int direction,int powerIn){
+void Stick::update(int direction,int powerIn){
  	switch(direction){
  		case 0:
  			break;
@@ -48,7 +48,7 @@ Stick::Stick(){
 
  	pos.x = target.x + power.x;
  	pos.z = target.z + power.z;
- }
+}
 //**************************************************************
 void Stick::updateTarget(point p){
 	target = p;

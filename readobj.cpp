@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <GL/glut.h>
+#include <GL/freeglut.h>
 #include <sstream>
 #include <fstream>
 #include <string>
@@ -40,7 +41,8 @@ World world;
 point velocity,pos,gravity,pos_cube,vel_cube;
 double xmin=-100,xmax=100,zmin=-100,zmax=100;
 int _floor=-10,rot=0;
-
+static char str[200];
+void * font = GLUT_BITMAP_9_BY_15;
 //**************************************************************
 void checkCollisionWithTable(Ball *b){
 	if (b->pos.x < xmin+b->radius ){
@@ -163,13 +165,19 @@ void drawTable(Table *t){
 //**************************************************************
 void display() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);		     // Clear Screen and Depth Buffer
+	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	// GLfloat position1[] = { 00.0, 100.0, 00.0, 1.0 };
-	
+	//glMatrixMode(GL_PROJECTION);
+//glLoadIdentity();
+//glOrtho(12, 133, 1, 122, 10, -100);
+//glLoadIdentity();
 	//cam position update
+	//glPushMatrix();	
 	gluLookAt( world.camera->cameraFrom.x,world.camera->cameraFrom.y,world.camera->cameraFrom.z, world.camera->cameraTo.x,0,world.camera->cameraTo.z, 0,1,0);	 // Define a viewing transformation
-									  // Pop the current matrix stack
+	//glPopMatrix();  //					  // Pop the current matrix stack
 
+	//**************************************************************
 	drawTable(world.table);
 	if(world._STATE == POSITIONSTICK){
 		glPushMatrix();										  // Push the current matrix stack
@@ -238,7 +246,14 @@ void display() {
 		checkCollisionWithTable(&world.ball[i]);
 	}
 	checkCollisionWithTable(&world.qBall);
+		//display score 
+	glPushMatrix();
+	 sprintf(str, "Player 1 Score: 1, Player 2 Score: 10");
+     glRasterPos2f(10, 10);
+     glutBitmapString(font,(unsigned char*)str);
+	glPopMatrix();
 	glutSwapBuffers();
+
 }
 
 
@@ -272,6 +287,7 @@ void initialize ()
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0); 
 	glClearColor(0.0, 0.0, 1.0, 1.0);
+	//gluOrtho2D(0,500,0,500);
 
 }
 //**************************************************************
