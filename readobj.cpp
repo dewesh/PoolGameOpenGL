@@ -173,13 +173,30 @@ void display() {
 	drawTable(world.table);
 	//current stick
 	glPushMatrix();		
-		glColor3f(0,0,1);								  // Push the current matrix stack
+		glColor3f(0,0.3,0.3);								  // Push the current matrix stack
 		GLUquadricObj *quadratic;
   		quadratic = gluNewQuadric();
   		glTranslatef(world.stick.pos.x,world.qBall.radius,world.stick.pos.z);
   		glRotatef(world.stick.angle,0,1,0);
   		gluCylinder(quadratic,world.qBall.radius*0.2,world.qBall.radius * 0.5,world.qBall.radius*30.0,32,32);
 	glPopMatrix();  // Pop the current matrix stack	
+	glPushMatrix();		
+		glColor3f(1,1,1);								  // Push the current matrix stack
+		GLUquadricObj *quadratic2;
+  		quadratic2 = gluNewQuadric();
+  		glTranslatef(world.stick.pos.x,world.qBall.radius,world.stick.pos.z);
+  		glRotatef(world.stick.angle,0,1,0);
+  		gluCylinder(quadratic2,world.qBall.radius*0.21,world.qBall.radius * 0.251,world.qBall.radius*5.0,32,32);
+	glPopMatrix();  // Pop the current matrix stack	
+	glPushMatrix();		
+		glColor3f(0.6,0.3,0.3);								  // Push the current matrix stack
+		GLUquadricObj *quadratic1;
+  		quadratic1 = gluNewQuadric();
+  		glTranslatef(world.stick.pos.x,world.qBall.radius,world.stick.pos.z);
+  		glRotatef(world.stick.angle,0,1,0);
+  		gluCylinder(quadratic1,world.qBall.radius*0.195,world.qBall.radius *0.795,world.qBall.radius*60.0,32,32);
+	glPopMatrix();  // Pop the current matrix stack	
+
 	//que ball update
 	glPushMatrix();										  // Push the current matrix stack
 		glColor3f(1,1,1);
@@ -230,9 +247,9 @@ void initialize ()
     glDepthFunc( GL_LEQUAL );
     glHint( GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST );						// specify implementation-specific hints
 
-	GLfloat amb_light[] = { 0.1, 0.1, 0.1, 1.0 };
-    GLfloat diffuse[] = { 0.6, 0.6, 0.6, 1 };
-    GLfloat specular[] = { 0.7, 0.7, 0.3, 1 };
+	GLfloat amb_light[] = { 0.4, 0.4, 0.4, 1.0 };
+    GLfloat diffuse[] = { 0.2, 0.2, 0.2, 1 };
+    GLfloat specular[] = { 0.2, 0.2, 0.2, 1 };
     glLightModelfv( GL_LIGHT_MODEL_AMBIENT, amb_light );
     glLightfv( GL_LIGHT0, GL_DIFFUSE, diffuse );
     glLightfv( GL_LIGHT0, GL_SPECULAR, specular );
@@ -298,17 +315,23 @@ void mouse ( int key1, int key2, int mousePositionX, int mousePositionY )
 	cout << key2;
 }
 //**************************************************************
+double t;
 void myMouseFunc(int x, int y){
 	//cout << x << ":" << y << endl;
-	currMousePosX = x;
-	currMousePosY = y;
+	currMousePosX = x-win.width/2;
+	currMousePosY = y-win.height/2;
+	if(world._STATE == POSITIONSTICK){
+		t = atan2(-currMousePosX,-currMousePosY);
+		world.stick.angle = t*180/3.145;
+		world.stick.update(0,0);
+	}
 }
 //**************************************************************
 int main(int argc, char **argv) 
 {
 	// set window values
-	win.width = 640;
-	win.height = 480;
+	win.width = 1400;
+	win.height = 700;
 	win.title = "OpenGL/GLUT Window.";
 	win.field_of_view_angle = 45;
 	win.z_near = 1.0f;

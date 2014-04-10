@@ -17,6 +17,7 @@
  	point pos;
  	Stick();
  	void updateTarget(point);
+ 	void updateAngle(double);
  	void update(int,int); // direction and power
  	int animate();
  	void reset();
