@@ -20,15 +20,6 @@
 
 using namespace std;
 
-typedef struct {
-    int width;
-	int height;
-	char* title;
-	float field_of_view_angle;
-	float z_near;
-	float z_far;
-} glutWindow;
-
 using namespace std;
  
 //**************************************************************************
@@ -215,18 +206,8 @@ void drawTable(Table *t){
 	//**************************************************************
 }
 //**************************************************************
-void display() {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);		     // Clear Screen and Depth Buffer
-		glMatrixMode(GL_MODELVIEW);
-	/*glLoadIdentity();
-	
-		glPushMatrix();
-	 sprintf(str, "Player 1 Score: 1, Player 2 Score: 10");
-     glRasterPos2f(0, 0);
-     glutBitmapString(font,(unsigned char*)str);
-	glPopMatrix();
-
-	glMatrixMode(GL_MODELVIEW);*/
+void renderGameScreen(){
+	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	gluLookAt( world.camera->cameraFrom.x,world.camera->cameraFrom.y,world.camera->cameraFrom.z, world.camera->cameraTo.x,0,world.camera->cameraTo.z, 0,1,0);	 // Define a viewing transformation
 	//glPopMatrix();  //					  // Pop the current matrix stack
@@ -294,14 +275,43 @@ void display() {
 			glutSolidSphere  (world.holes[i].radius,50,50); 
 		glPopMatrix();  // Pop the current matrix stack
 	}
-	world.update();
-	for (int i = 0; i < 15; ++i)
-	{
-		checkCollisionWithTable(&world.ball[i]);
-	}
-	checkCollisionWithTable(&world.qBall);
+}
+//**************************************************************
+void rendderMenuScreen(){// TODO-
+
+}
+//**************************************************************
+void renderEndScreen(){// TODO-
+
+}
+//**************************************************************
+void renderIntroductionScreen(){// TODO-
+
+}
+//**************************************************************
+void display() {
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);		     // Clear Screen and Depth Buffer
+	if(world._SCREEN == GAME){
+		renderGameScreen();
+		world.update();
+		for (int i = 0; i < 15; ++i)
+		{
+			checkCollisionWithTable(&world.ball[i]);
+		}
+		checkCollisionWithTable(&world.qBall);
 		//display score
 		showInfo(); 
+	}
+	else if (world._SCREEN == MENU){
+		rendderMenuScreen();
+	}
+	else if (world._SCREEN == INTRODUCTION)
+	{
+		renderIntroductionScreen();
+	}
+	else{
+		renderEndScreen();
+	}
 	glutSwapBuffers();
 	glFlush();
 }

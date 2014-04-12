@@ -14,6 +14,7 @@
  	
  public:
  	enum STATE _STATE;
+ 	enum SCREEN _SCREEN;
  	Ball ball[15];
  	Ball qBall;
  	Ball holes[4];

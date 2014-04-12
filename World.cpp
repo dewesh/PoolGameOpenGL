@@ -17,6 +17,7 @@ void World::defineBallTypes()
 }
 
 World::World(){
+	_SCREEN = GAME;// update when all the screens added
 	camFar = 20;
 	qBall.pos.x = -50;
 	qBall.pos.z = 0;
@@ -204,6 +205,7 @@ void World::SwitchPlayer()
 	 		updateBallCollision(&qBall,&ball[i],15,i);
 	 		if(checkHole(&ball[i])){
 	 			ball_pocketed=1;
+	 			//if this is the first hole then only update the player
 	 			updatePlayerInfo(ball[i],activePlayer);
 	 			cout << "ball::" << i << " pocketed" <<endl;
 	 		}

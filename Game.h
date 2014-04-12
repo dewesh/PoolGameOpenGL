@@ -6,18 +6,21 @@
 using namespace std;
 enum STATE { START,POSITIONSTICK,TAKESHOT,READY,HIT,RUNNING,STOPPED };
 enum PLAYER_TURN { fFIRST, SECOND };
-enum BALL_TYPE {SOLID, STRIPE };
+enum SCREEN { INTRODUCTION,MENU,GAME,END };
+enum BALL_TYPE {SOLID, STRIPE,QBALL,BLACK };
 
 class point {
 public:
 	double x,y,z;
 };
 
-/*class Player{
-public:
-	int score;
-	vector<int> balls;
-	int name;
-	int ballType;
-};*/
+typedef struct {
+    int width;
+	int height;
+	char* title;
+	float field_of_view_angle;
+	float z_near;
+	float z_far;
+} glutWindow;
+
 #endif
