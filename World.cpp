@@ -6,16 +6,7 @@
 
 #define root2 sqrt(2)
 
-void World::defineBallTypes()
-{
-	int i;
-	for(i=0;i<8;i++)
-	ball[i].Balltype='R';
-	
-	for(i=8;i<15;i++)
-	ball[i].Balltype='G';
-}
-
+//**************************************************************
 World::World(){
 	_SCREEN = GAME;// update when all the screens added
 	camFar = 20;
@@ -44,94 +35,6 @@ World::World(){
 	holes[2].pos = table->p3;
 	holes[3].pos = table->p4;
 	reset();
-}
-
-
-
-
-void World::updatePlayerInfo(Ball b,int activePlayer)              // Called if a player picks a ball
-{
-	char inverseBallColor;
-	char color=b.Balltype;
-	if(b.Balltype=='R')
-	inverseBallColor='G';
-	else
-	inverseBallColor='R';
-	
-	player[activePlayer].setballtype(color);
-	if(activePlayer)
-	player[0].setballtype(inverseBallColor);
-	else
-	player[1].setballtype(inverseBallColor);
-}
-
-
-
-bool World::updateBallCollision(Ball *a, Ball *b,int u,int v)
-{
-	
-	if(!( a -> previousCollison == v && b -> previousCollison == u)){
-		if(isCollision(a,b)){
-			
-			// printf("Collision : %d:%d,  ,%d:%d\n",a -> previousCollison,u,b -> previousCollison,v);
-			a -> previousCollison = v;
-			b -> previousCollison = u;
-				//update b1 and b2
-			double alongB1,alongB2,normalB1,normalB2;
-			double cosPhi,sinPhi,Phi;
-			Phi = getPhi(*a,*b);
-			cosPhi = cos(Phi);
-			sinPhi = sin(Phi);
-			alongB2 = b->velocity.x * cosPhi - b->velocity.z * sinPhi;
-			normalB2 = b->velocity.x * sinPhi + b->velocity.z * cosPhi;
-			alongB1 = a->velocity.x * cosPhi - a->velocity.z * sinPhi;
-			normalB1 = a->velocity.x * sinPhi + a->velocity.z * cosPhi;
-			//change to along and normal
-			//swap along
-			double temp;
-			temp = alongB2;
-			alongB2 = alongB1;
-			alongB1 = temp;
-			//change to x and y
-			a->velocity.x = (alongB1*cosPhi + normalB1*sinPhi)/collisionFriction ;
-			a->velocity.z = (-alongB1*sinPhi + normalB1*cosPhi)/collisionFriction;
-			b->velocity.x = (alongB2*cosPhi + normalB2*sinPhi)/collisionFriction;
-			b->velocity.z = (-alongB2*sinPhi + normalB2*cosPhi)/collisionFriction;
-			return true;
-		}
-		else{
-			return false;
-		}
-	}
-}
-//**************************************************************
-bool World::checkHole(Ball *b1){
-	double dist,requiredDist;
-	double nextPredictDistance;
-	bool isPocket = false;
-	if(b1->active)
-	for (int i = 0; i < 4; ++i)
-	{
-		requiredDist = (holes[i].radius);
-		dist = sqrt(((holes[i].pos.x-b1->pos.x)*(holes[i].pos.x-b1->pos.x)) + ((holes[i].pos.y-b1->pos.y)*(holes[i].pos.y-b1->pos.y)) + ((holes[i].pos.z-b1->pos.z)*(holes[i].pos.z-b1->pos.z)));
-		if(dist <= requiredDist){
-			b1->reset();
-			b1->pos.y = -b1->radius*2;
-			b1->active = false;
-			isPocket = true;
-			break;
-		}
-	}
-	return isPocket;
-}
-
-
-void World::SwitchPlayer()
-{
-	if(activePlayer==1)
-	activePlayer=0;
-	else
-	activePlayer=1;
 }
 
 //**************************************************************
@@ -311,4 +214,96 @@ bool World::isCollision(Ball *b1,Ball *b2){
 	else{
 		return false;
 	}
+}
+//**************************************************************
+void World::defineBallTypes()
+{
+	int i;
+	for(i=0;i<8;i++)
+	ball[i].Balltype='R';
+	
+	for(i=8;i<15;i++)
+	ball[i].Balltype='G';
+}
+//**************************************************************
+void World::SwitchPlayer()
+{
+	if(activePlayer==1)
+	activePlayer=0;
+	else
+	activePlayer=1;
+}
+//**************************************************************
+void World::updatePlayerInfo(Ball b,int activePlayer)              // Called if a player picks a ball
+{
+	char inverseBallColor;
+	char color=b.Balltype;
+	if(b.Balltype=='R')
+	inverseBallColor='G';
+	else
+	inverseBallColor='R';
+	
+	player[activePlayer].setballtype(color);
+	if(activePlayer)
+	player[0].setballtype(inverseBallColor);
+	else
+	player[1].setballtype(inverseBallColor);
+}
+//**************************************************************
+bool World::updateBallCollision(Ball *a, Ball *b,int u,int v)
+{
+	
+	if(!( a -> previousCollison == v && b -> previousCollison == u)){
+		if(isCollision(a,b)){
+			
+			// printf("Collision : %d:%d,  ,%d:%d\n",a -> previousCollison,u,b -> previousCollison,v);
+			a -> previousCollison = v;
+			b -> previousCollison = u;
+				//update b1 and b2
+			double alongB1,alongB2,normalB1,normalB2;
+			double cosPhi,sinPhi,Phi;
+			Phi = getPhi(*a,*b);
+			cosPhi = cos(Phi);
+			sinPhi = sin(Phi);
+			alongB2 = b->velocity.x * cosPhi - b->velocity.z * sinPhi;
+			normalB2 = b->velocity.x * sinPhi + b->velocity.z * cosPhi;
+			alongB1 = a->velocity.x * cosPhi - a->velocity.z * sinPhi;
+			normalB1 = a->velocity.x * sinPhi + a->velocity.z * cosPhi;
+			//change to along and normal
+			//swap along
+			double temp;
+			temp = alongB2;
+			alongB2 = alongB1;
+			alongB1 = temp;
+			//change to x and y
+			a->velocity.x = (alongB1*cosPhi + normalB1*sinPhi)/collisionFriction ;
+			a->velocity.z = (-alongB1*sinPhi + normalB1*cosPhi)/collisionFriction;
+			b->velocity.x = (alongB2*cosPhi + normalB2*sinPhi)/collisionFriction;
+			b->velocity.z = (-alongB2*sinPhi + normalB2*cosPhi)/collisionFriction;
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+}
+//**************************************************************
+bool World::checkHole(Ball *b1){
+	double dist,requiredDist;
+	double nextPredictDistance;
+	bool isPocket = false;
+	if(b1->active)
+	for (int i = 0; i < 4; ++i)
+	{
+		requiredDist = (holes[i].radius);
+		dist = sqrt(((holes[i].pos.x-b1->pos.x)*(holes[i].pos.x-b1->pos.x)) + ((holes[i].pos.y-b1->pos.y)*(holes[i].pos.y-b1->pos.y)) + ((holes[i].pos.z-b1->pos.z)*(holes[i].pos.z-b1->pos.z)));
+		if(dist <= requiredDist){
+			b1->reset();
+			b1->pos.y = -b1->radius*2;
+			b1->active = false;
+			isPocket = true;
+			break;
+		}
+	}
+	return isPocket;
 }
