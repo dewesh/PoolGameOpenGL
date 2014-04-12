@@ -5,10 +5,22 @@
 
 
 #define root2 sqrt(2)
+
+void World::defineBallTypes()
+{
+	int i;
+	for(i=0;i<8;i++)
+	ball[i].Balltype='R';
+	
+	for(i=8;i<15;i++)
+	ball[i].Balltype='G';
+}
+
 World::World(){
 	camFar = 20;
 	qBall.pos.x = -50;
 	qBall.pos.z = 0;
+	qBall.Balltype='W';
 	collisionFriction = 1;
 	stick.updateTarget(qBall.pos);
 	stick.update(0,0);
@@ -17,6 +29,9 @@ World::World(){
 	camPos.z = stick.target.z + stick.length*stick.cosTheta*camFar;
 	camPos.y = stick.length*camFar;
 	camera = new Camera(camPos,qBall.pos);
+	
+	activePlayer=0;
+	defineBallTypes();
 	table = new Table(300,150);
 	for (int i = 0; i < 4; ++i)
 	{
@@ -29,6 +44,27 @@ World::World(){
 	holes[3].pos = table->p4;
 	reset();
 }
+
+
+
+
+void World::updatePlayerInfo(Ball b,int activePlayer)              // Called if a player picks a ball
+{
+	char inverseBallColor;
+	char color=b.Balltype;
+	if(b.Balltype=='R')
+	inverseBallColor='G';
+	else
+	inverseBallColor='R';
+	
+	player[activePlayer].setballtype(color);
+	if(activePlayer)
+	player[0].setballtype(inverseBallColor);
+	else
+	player[1].setballtype(inverseBallColor);
+}
+
+
 
 bool World::updateBallCollision(Ball *a, Ball *b,int u,int v)
 {
@@ -87,8 +123,21 @@ bool World::checkHole(Ball *b1){
 	}
 	return isPocket;
 }
+
+
+void World::SwitchPlayer()
+{
+	if(activePlayer==1)
+	activePlayer=0;
+	else
+	activePlayer=1;
+}
+
 //**************************************************************
  void World::update(){
+ 
+ 	printf("Active Player at table is player-%d\n",activePlayer);
+ 
  	if(_STATE == START){
  		reset();
  		_STATE = POSITIONSTICK;
@@ -147,11 +196,15 @@ bool World::checkHole(Ball *b1){
 		if(checkHole(&qBall)){
 			_STATE = START;
 		}
+		
+		int ball_pocketed=0;
  		for (int i = 0; i < 15; ++i)
 	 	{
 	 		ball[i].update();
 	 		updateBallCollision(&qBall,&ball[i],15,i);
 	 		if(checkHole(&ball[i])){
+	 			ball_pocketed=1;
+	 			updatePlayerInfo(ball[i],activePlayer);
 	 			cout << "ball::" << i << " pocketed" <<endl;
 	 		}
 	 		for (int j = i+1; j < 15; ++j)
@@ -159,6 +212,9 @@ bool World::checkHole(Ball *b1){
 	 			updateBallCollision(&ball[i],&ball[j],i,j);
 	 		}
 	 	}
+	 	
+	 	if(ball_pocketed==0)
+	 	SwitchPlayer();
  	}
  	else if (_STATE == READY)
  	{

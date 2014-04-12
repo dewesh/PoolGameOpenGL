@@ -7,6 +7,7 @@
  {
  public:
  	point pos;
+ 	char Balltype;
  	point velocity,acc;
  	double radius;
  	int previousCollison;

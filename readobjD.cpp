@@ -372,10 +372,10 @@ void keyboard ( unsigned char key, int mousePositionX, int mousePositionY )
     case space:
 		//velocity.y = 3;
 		break;
-    /*case KEY_ESCAPE:        
+    case KEY_ESCAPE:        
     	exit ( 0 );   
 	    break;      
-*/
+
     default:      
 	    break;
   }

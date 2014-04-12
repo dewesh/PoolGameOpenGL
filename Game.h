@@ -13,11 +13,11 @@ public:
 	double x,y,z;
 };
 
-class Player{
+/*class Player{
 public:
 	int score;
 	vector<int> balls;
 	int name;
 	int ballType;
-};
+};*/
 #endif

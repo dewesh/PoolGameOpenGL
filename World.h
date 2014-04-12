@@ -6,6 +6,7 @@
 #include "Stick.h"
 #include "Game.h"
 #include "Table.h"
+#include "Player.h"
 #include <vector>
  
  class World
@@ -16,6 +17,8 @@
  	Ball ball[15];
  	Ball qBall;
  	Ball holes[4];
+ 	Player player[2];
+ 	int activePlayer;
  	Camera *camera;
  	Table *table;
  	int camFar;
@@ -28,6 +31,9 @@
  	bool isCollision(Ball *,Ball *);
  	bool checkHole(Ball*);
  	bool updateBallCollision(Ball *, Ball *,int ,int);
+ 	void defineBallTypes();
+ 	void updatePlayerInfo(Ball ,int);
+ 	void SwitchPlayer();
  };
 
 #endif

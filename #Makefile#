@@ -17,10 +17,10 @@ Camera.o: Camera.cpp Camera.h Game.h
 	g++ -Wall -c Camera.cpp
 
 
-libPlayer.a: Player.o
-	ar -rcs libPlayer.a Player.o
-Player.o: Player.cpp Player.h Game.h
-	g++ -Wall -c Player.cpp
+libPlayer.a: player.o
+	ar -rcs libPlayer.a player.o
+player.o: player.cpp player.h Game.h
+	g++ -Wall -c player.cpp
 
 libStick.a: Stick.o
 	ar -rcs libStick.a Stick.o
