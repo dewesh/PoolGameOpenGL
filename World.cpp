@@ -96,8 +96,15 @@ World::World(){
  		}
  		//call update
 	 	qBall.update();
-		if(checkHole(&qBall)){
-			_STATE = START;
+		if(checkHole(&qBall)){	// change the state to place ball 
+			qBall.pos.x = 0;
+			qBall.pos.z = table->len*0.25;
+			qBall.reset();
+			qBall.pos.y = qBall.radius;
+			qBall.active = true;
+			stick.updateTarget(qBall.pos);
+			stick.update(0,0);
+			_STATE = READY;
 		}
 		
  		for (int i = 0; i < 15; ++i)
