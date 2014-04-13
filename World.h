@@ -24,6 +24,7 @@
  	Table *table;
  	int camFar;
  	Stick stick;
+ 	int ball_pocketed;
  	double collisionFriction;	// ball ball collision
  	World();
  	void update();

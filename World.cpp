@@ -40,7 +40,6 @@ World::World(){
 //**************************************************************
  void World::update(){
  
- 	printf("Active Player at table is player-%d\n",activePlayer);
  
  	if(_STATE == START){
  		reset();
@@ -101,7 +100,6 @@ World::World(){
 			_STATE = START;
 		}
 		
-		int ball_pocketed=0;
  		for (int i = 0; i < 15; ++i)
 	 	{
 	 		ball[i].update();
@@ -118,14 +116,18 @@ World::World(){
 	 		}
 	 	}
 	 	
-	 	if(ball_pocketed==0)
-	 	SwitchPlayer();
+	 	
  	}
  	else if (_STATE == READY)
  	{
     	stick.updateTarget(qBall.pos);
  		stick.update(0,0);
  		qBall.previousCollison = -1;
+
+ 		if(ball_pocketed==0)
+		 	SwitchPlayer();
+	 	printf("Active Player at table is player-%d\n",activePlayer);
+		ball_pocketed =0 ;
  		_STATE = POSITIONSTICK;
  		std::cout << "READY" << std::endl ;
  	}
