@@ -203,12 +203,8 @@ void drawTable(Table *t){
 		glPopMatrix();
 	//**************************************************************
 }
-//**************************************************************
+ //**************************************************************
 void renderGameScreen(){
-		 // Define a viewing transformation
-	//glPopMatrix();  //					  // Pop the current matrix stack
-
-	//**************************************************************
 	drawTable(world.table);
 	if(world._STATE == POSITIONSTICK){
 		glPushMatrix();										  // Push the current matrix stack
@@ -286,7 +282,6 @@ void renderEndScreen(){
 		gluLookAt( world.camera->cameraFrom.x,world.camera->cameraFrom.y,world.camera->cameraFrom.z, world.camera->cameraTo.x,0,world.camera->cameraTo.z, 0,1,0);
 		glRotatef(60,0,1,0);
 		renderGameScreen();
-
 	glPushMatrix();                     // save current modelview matrix
     glLoadIdentity();                   // reset modelview matrix
 	 // set to 2D orthogonal projection
@@ -416,6 +411,7 @@ void initialize ()
 
 }
 //**************************************************************
+
 void keyboard ( unsigned char key, int mousePositionX, int mousePositionY )		
 { 
   switch ( key ) 
@@ -424,11 +420,11 @@ void keyboard ( unsigned char key, int mousePositionX, int mousePositionY )
 		//camPosX--;
     	if(world._STATE == POSITIONSTICK)
 		world.stick.update(-1,0);
-    	//rot -=1;
+    	rot -=1;
     	break;
     case right_arr:
 		// camPosX ++;
-    	//rot +=1;
+    	rot +=1;
     	if(world._STATE == POSITIONSTICK)
     	world.stick.update(1,0);
     	break;
@@ -476,10 +472,10 @@ double t;
 void myMouseFunc(int x, int y){
 	//cout << x << ":" << y << endl;
 	currMousePosX = x-win.width/2;
-	currMousePosY = y-win.height/2;
+	currMousePosY = win.height-y;
 	if(world._STATE == POSITIONSTICK){
 		t = atan2(-currMousePosX,-currMousePosY);
-		world.stick.angle = t*180/3.145;
+		world.stick.angle = rot-t*180/3.145;
 		world.stick.update(0,0);
 	}
 }

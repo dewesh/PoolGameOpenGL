@@ -48,6 +48,16 @@ World::World(){
  	}
  	else if (_STATE == POSITIONSTICK)
  	{
+ 		if(!qBall.active){	
+			qBall.pos.x = 0;
+			qBall.pos.z = table->len*0.25;
+			qBall.reset();
+			qBall.pos.y = qBall.radius;
+			qBall.active = true;
+			stick.updateTarget(qBall.pos);
+			stick.update(0,0);
+			//_STATE = READY;
+		}
  		//click will trigger the hit button
 		point camPos;
 		camPos.x = stick.target.x + stick.length*stick.sinTheta*camFar;
@@ -60,6 +70,7 @@ World::World(){
  	}
  	else if (_STATE == TAKESHOT)
  	{
+
  		if(stick.animate() == 0){
  			_STATE =HIT;
  			std::cout << "HIT" << std::endl ;
@@ -96,16 +107,8 @@ World::World(){
  		}
  		//call update
 	 	qBall.update();
-		if(checkHole(&qBall)){	// change the state to place ball 
-			qBall.pos.x = 0;
-			qBall.pos.z = table->len*0.25;
-			qBall.reset();
-			qBall.pos.y = qBall.radius;
-			qBall.active = true;
-			stick.updateTarget(qBall.pos);
-			stick.update(0,0);
-			_STATE = READY;
-		}
+		checkHole(&qBall);	// change the state to place ball 
+		
 		
  		for (int i = 0; i < 15; ++i)
 	 	{
