@@ -39,7 +39,7 @@ World::World(){
 
 //**************************************************************
  void World::update(){
- 
+ 	int iter;
  
  	if(_STATE == START){
  		reset();
@@ -113,6 +113,7 @@ World::World(){
 	 		updateBallCollision(&qBall,&ball[i],15,i);
 	 		if(checkHole(&ball[i])){
 	 			ball_pocketed=1;
+	 			ball[i].active=false;
 	 			//if this is the first hole then only update the player
 	 			updatePlayerInfo(ball[i],activePlayer);
 	 			cout << "ball::" << i << " pocketed" <<endl;
@@ -121,6 +122,40 @@ World::World(){
 	 		{
 	 			updateBallCollision(&ball[i],&ball[j],i,j);
 	 		}
+	 	}
+	 	
+	 	for(iter=0;iter<8;iter++)
+	 	{
+	 		if(ball[iter].active)
+	 		break;
+	 	}
+	 	//cout << "Active RED Ball " << iter << "\n";
+	 	if(iter==8)
+	 	{
+	 		if('R'==player[0].balltype)
+	 		cout << "Player 0 Won\n";
+	 		
+	 		else
+	 		cout << "Player 1 Won\n";
+	 		
+	 		_STATE=START;
+	 	}
+	 	
+	 	for(iter=8;iter<15;iter++)
+	 	{
+	 		if(ball[iter].active)
+	 		break;
+	 	}
+	 	//cout << "Active YELLOW Ball  " << iter <<"\n";
+	 	if(iter==15)
+	 	{
+	 		if('Y'==player[0].balltype)
+	 		cout << "Player 0 Won\n";
+	 		
+	 		else
+	 		cout << "Player 1 Won\n";
+	 		
+	 		_STATE=START;
 	 	}
 	 	
 	 	
@@ -232,7 +267,7 @@ void World::defineBallTypes()
 	ball[i].Balltype='R';
 	
 	for(i=8;i<15;i++)
-	ball[i].Balltype='G';
+	ball[i].Balltype='Y';
 }
 //**************************************************************
 void World::SwitchPlayer()
@@ -245,10 +280,12 @@ void World::SwitchPlayer()
 //**************************************************************
 void World::updatePlayerInfo(Ball b,int activePlayer)              // Called if a player picks a ball
 {
+	if(player[activePlayer].balltype=='W')
+	{
 	char inverseBallColor;
 	char color=b.Balltype;
 	if(b.Balltype=='R')
-	inverseBallColor='G';
+	inverseBallColor='Y';
 	else
 	inverseBallColor='R';
 	
@@ -257,6 +294,7 @@ void World::updatePlayerInfo(Ball b,int activePlayer)              // Called if 
 	player[0].setballtype(inverseBallColor);
 	else
 	player[1].setballtype(inverseBallColor);
+	}
 }
 //**************************************************************
 bool World::updateBallCollision(Ball *a, Ball *b,int u,int v)

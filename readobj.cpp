@@ -256,8 +256,11 @@ void renderGameScreen(){
 	//general ball update
 	for (int i = 0; i < 15; ++i)
 	{
-		glPushMatrix();										  // Push the current matrix stack
-			glColor3f((double)1/i+1,(double)1/i+1,0);
+		glPushMatrix();	
+			if(i>=8)									  // Push the current matrix stack
+			glColor3f(1,1,0);
+			else
+			glColor3f(1,0,0);
 			glTranslatef(world.ball[i].pos.x,world.ball[i].pos.y,world.ball[i].pos.z);  //Multiply the current matrix by a translation matrix
 			glutSolidSphere  (world.ball[i].radius,50,50); 
 		glPopMatrix();  // Pop the current matrix stack
