@@ -280,8 +280,39 @@ void rendderMenuScreen(){// TODO-
 
 }
 //**************************************************************
-void renderEndScreen(){// TODO-
+void renderEndScreen(){
+	glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+		gluLookAt( world.camera->cameraFrom.x,world.camera->cameraFrom.y,world.camera->cameraFrom.z, world.camera->cameraTo.x,0,world.camera->cameraTo.z, 0,1,0);
+		glRotatef(60,0,1,0);
+		renderGameScreen();
 
+	glPushMatrix();                     // save current modelview matrix
+    glLoadIdentity();                   // reset modelview matrix
+	 // set to 2D orthogonal projection
+    glMatrixMode(GL_PROJECTION);        // switch to projection matrix
+    glPushMatrix();                     // save current projection matrix
+    glLoadIdentity();                   // reset projection matrix
+    gluOrtho2D(0, win.width, 0, win.height);  // set to orthogonal projection
+
+    float color[4] = {1, 1, 1, 1};
+    void * font = GLUT_BITMAP_TIMES_ROMAN_24;
+
+    stringstream ss;
+
+    //**************************************************************
+    ss.str(""); // clear buffer
+    ss << "Winner is " << ends;
+    drawString(ss.str().c_str(), win.width/2-10, win.height/2, color, font);
+    //**************************************************************
+    ss.str("");
+    ss << "Click Any Where to ReStart The Game" << ends;
+    drawString(ss.str().c_str(), win.width/3, 1, color, font);
+    // restore projection matrix
+    glPopMatrix();                   // restore to previous projection matrix
+    // restore modelview matrix
+    //glMatrixMode(GL_MODELVIEW);      // switch to modelview matrix
+    glPopMatrix();                   // restore to previous modelview matrix
 }
 //**************************************************************
 void renderIntroductionScreen(){// TODO-
@@ -431,10 +462,12 @@ void mouse ( int key1, int key2, int mousePositionX, int mousePositionY )
 	if(key1 == 0 && key2 == 1 && world._STATE == POSITIONSTICK && world._SCREEN == GAME){
 		//world.reset();
 		world._STATE = TAKESHOT;		
-	}
-	if(key1 == 0 && key2 == 1 && world._SCREEN == INTRODUCTION){
+	} else if(key1 == 0 && key2 == 1 && world._SCREEN == INTRODUCTION){
 		//world.reset();
 		world._SCREEN = GAME;		
+	}else if(key1 == 0 && key2 == 1 && world._SCREEN == END){
+		//world.reset();
+		world._SCREEN = INTRODUCTION;		
 	}
 	cout << key2;
 }
@@ -464,7 +497,7 @@ int main(int argc, char **argv)
 	xmax = world.table->p1.x;
 	zmax = world.table->p1.z;
 	zmin = world.table->p3.z;
-	world._SCREEN = INTRODUCTION;
+	world._SCREEN = END;
 	// initialize and run program
 	glutInit(&argc, argv);                                      // GLUT initialization
 	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH );  // Display Mode

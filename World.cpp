@@ -138,7 +138,8 @@ World::World(){
 	 		else
 	 		cout << "Player 1 Won\n";
 	 		
-	 		_STATE=START;
+	 		_STATE = START;
+	 		_SCREEN = END; 
 	 	}
 	 	
 	 	for(iter=8;iter<15;iter++)
@@ -156,6 +157,7 @@ World::World(){
 	 		cout << "Player 1 Won\n";
 	 		
 	 		_STATE=START;
+	 		_SCREEN = END; 
 	 	}
 	 	
 	 	
