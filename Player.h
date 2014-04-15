@@ -5,7 +5,7 @@
 class Player{
 	
 	public:
-		//string Playername;
+		char* Playername;
 		char balltype;
 		int score;
 		void setballtype(char s);
