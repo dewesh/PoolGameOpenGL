@@ -19,6 +19,7 @@
  	Ball qBall;
  	Ball holes[4];
  	Player player[2];
+ 	bool FOUL;
  	int activePlayer;
  	Camera *camera;
  	Table *table;

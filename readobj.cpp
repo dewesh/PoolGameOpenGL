@@ -88,6 +88,40 @@ void drawString(const char *str, int x, int y, float color[4], void *font){
     glEnable(GL_LIGHTING);
     glPopAttrib();
 }
+
+
+void showFOUL(){
+    // backup current model-view matrix
+    glPushMatrix();                     // save current modelview matrix
+    glLoadIdentity();                   // reset modelview matrix
+
+    // set to 2D orthogonal projection
+    glMatrixMode(GL_PROJECTION);        // switch to projection matrix
+    glPushMatrix();                     // save current projection matrix
+    glLoadIdentity();                   // reset projection matrix
+    gluOrtho2D(0, win.width, 0, win.height);  // set to orthogonal projection
+
+    float color[4] = {1, 1, 1, 1};
+
+    stringstream ss;
+    drawString(ss.str().c_str(), win.width/2, win.height/2, color, font);
+    ss.str(""); // clear buffer
+    ss << "FOUL" << ends;
+    drawString(ss.str().c_str(), win.width/2, win.height/2-20, color, font);
+    
+    // restore projection matrix
+    glPopMatrix();                   // restore to previous projection matrix
+    // restore modelview matrix
+    glMatrixMode(GL_MODELVIEW);      // switch to modelview matrix
+    glPopMatrix();                   // restore to previous modelview matrix
+}
+
+
+
+
+
+
+
 void showInfo(){
     // backup current model-view matrix
     glPushMatrix();                     // save current modelview matrix
@@ -206,6 +240,10 @@ void drawTable(Table *t){
  //**************************************************************
 void renderGameScreen(){
 	drawTable(world.table);
+	
+	if(world.FOUL==true)
+	showFOUL();
+	
 	if(world._STATE == POSITIONSTICK){
 		glPushMatrix();										  // Push the current matrix stack
 			glColor3f(1.0, 1.0, 1.0);
@@ -249,8 +287,20 @@ void renderGameScreen(){
 		glutSolidSphere  (world.qBall.radius,50,50); 
 	glPopMatrix();  // Pop the current matrix stack
 	
+	// Generate Balck ball update
+	if(world.ball[0].active)
+	{
+	
+	glPushMatrix();	
+	glColor3f(0,0,0);
+	glTranslatef(world.ball[0].pos.x,world.ball[0].pos.y,world.ball[0].pos.z);  //Multiply the current matrix by a translation matrix
+	glutSolidSphere  (world.ball[0].radius,50,50); 
+	glPopMatrix();
+	
+	}
+	
 	//general ball update
-	for (int i = 0; i < 15; ++i)
+	for (int i = 1; i < 15; ++i)
 	{
 		glPushMatrix();	
 			if(i>=8)									  // Push the current matrix stack
@@ -261,6 +311,11 @@ void renderGameScreen(){
 			glutSolidSphere  (world.ball[i].radius,50,50); 
 		glPopMatrix();  // Pop the current matrix stack
 	}
+	
+	
+	
+	
+	
 	//holes
 	for (int i = 0; i < 4; ++i)
 	{
@@ -351,7 +406,8 @@ void display() {
 	if(world._SCREEN == GAME){
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
-		gluLookAt( world.camera->cameraFrom.x,world.camera->cameraFrom.y,world.camera->cameraFrom.z, world.camera->cameraTo.x,0,world.camera->cameraTo.z, 0,1,0);
+		//gluLookAt( world.camera->cameraFrom.x,world.camera->cameraFrom.y,world.camera->cameraFrom.z, world.camera->cameraTo.x,0,world.camera->cameraTo.z, 0,1,0);
+		gluLookAt( 0,280,0, 0,0,0, 1,0,0);
 		renderGameScreen();
 		world.update();
 		for (int i = 0; i < 15; ++i)

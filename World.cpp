@@ -21,7 +21,7 @@ World::World(){
 	camPos.z = stick.target.z + stick.length*stick.cosTheta*camFar;
 	camPos.y = stick.length*camFar;
 	camera = new Camera(camPos,qBall.pos);
-	
+	FOUL=false;
 	activePlayer=0;
 	defineBallTypes();
 	table = new Table(300,150);
@@ -82,6 +82,7 @@ World::World(){
  		// update queball and change state
 		qBall.velocity.z = -stick.power.z/5;
 		qBall.velocity.x = -stick.power.x/5;
+		//qBall.firstCollision=false;
 		stick.reset();
  		_STATE = RUNNING;
  		std::cout << "RUNNING" << std::endl ;
@@ -107,8 +108,8 @@ World::World(){
  		}
  		//call update
 	 	qBall.update();
-		checkHole(&qBall);	// change the state to place ball 
-		
+		if(checkHole(&qBall)==true)	// change the state to place ball 
+		FOUL=true;
 		
  		for (int i = 0; i < 15; ++i)
 	 	{
@@ -171,8 +172,9 @@ World::World(){
  		stick.update(0,0);
  		qBall.previousCollison = -1;
 
- 		if(ball_pocketed==0)
+ 		if(ball_pocketed==0 || FOUL==true)
 		 	SwitchPlayer();
+		 	FOUL=false;
 	 	printf("Active Player at table is player-%d\n",activePlayer);
 		ball_pocketed =0 ;
  		_STATE = POSITIONSTICK;
@@ -307,6 +309,16 @@ bool World::updateBallCollision(Ball *a, Ball *b,int u,int v)
 	
 	if(!( a -> previousCollison == v && b -> previousCollison == u)){
 		if(isCollision(a,b)){
+		
+			if(a->firstCollision==false && a==&qBall)
+			{
+			a->firstCollision=true;
+				if((player[activePlayer].balltype!=b->Balltype && player[activePlayer].balltype!='W') || b==&ball[0])
+				{
+								
+				FOUL=true;
+				}
+			}
 			
 			// printf("Collision : %d:%d,  ,%d:%d\n",a -> previousCollison,u,b -> previousCollison,v);
 			a -> previousCollison = v;

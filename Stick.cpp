@@ -72,13 +72,13 @@ void Stick::updateAngle(double t){
 }
 //**************************************************************
 int Stick::animate(){
-	if(count == 10){
+	if(count == 5){
 		count = 0;
 		return 0;
 	}
 	else{
-		pos.x -= power.x/10;
-		pos.z -= power.z/10;
+		pos.x -= power.x/5;
+		pos.z -= power.z/5;
 		count ++;
 		return 1;
 	}

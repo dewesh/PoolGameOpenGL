@@ -12,6 +12,7 @@
  	double radius;
  	int previousCollison;
  	bool active;
+ 	bool firstCollision;
  	Ball();
  	Ball(double);
  	void update();

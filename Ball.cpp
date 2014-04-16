@@ -1,12 +1,13 @@
 #include "Ball.h"
 
 Ball::Ball(){
-	radius = 3;
+	radius = 4;
 	pos.y = radius;
 	pos.x = 0;
 	pos.z = 0;
 	previousCollison = -1;
 	active = true;
+	firstCollision=false;
 }
 Ball::Ball(double radius)
 {
@@ -30,5 +31,6 @@ void Ball::reset(){
 	velocity.z = 0;
 	velocity.y = 0;
 	previousCollison = -1;
+	firstCollision=false;
 
 }
