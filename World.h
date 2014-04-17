@@ -39,6 +39,7 @@
  	void defineBallTypes();
  	void updatePlayerInfo(Ball ,int);
  	void SwitchPlayer();
+ 	int typeOfBallFinished();
  };
 
 #endif

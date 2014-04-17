@@ -37,7 +37,53 @@ World::World(){
 	holes[3].pos = table->p4;
 	reset();
 }
+int World::typeOfBallFinished(){
+	int iter;
+	for(iter=1;iter<8;iter++)
+	 	{
+	 		if(ball[iter].active)
+	 		break;
+	 	}
+	 	//cout << "Active RED Ball " << iter << "\n";
+	 	if(iter==8)
+	 	{
+	 		if('R'==player[0].balltype){
+	 			cout << "Player 0 Won\n";
+	 			_WINNER = FIRST;
+	 		}
+	 		else{
+	 			cout << "Player 1 Won\n";
+	 			_WINNER = SECOND;
+	 		}
+	 		_STATE = START;
+	 		_SCREEN = END; 
+	 		return 0;
+	 	}
+	 	
+	 	for(iter=8;iter<15;iter++)
+	 	{
+	 		if(ball[iter].active)
+	 		break;
+	 	}
+	 	//cout << "Active YELLOW Ball  " << iter <<"\n";
+	 	if(iter==15)
+	 	{
+	 		if('Y'==player[0].balltype){
+	 			cout << "Player 0 Won\n";
+	 			_WINNER = FIRST;
+	 		}
+	 		else{
+	 			cout << "Player 1 Won\n";
+	 			_WINNER = SECOND;
+	 		}
+	 		_STATE=START;
+	 		_SCREEN = END; 
+	 		return 1;
+	 	}
+	 	
+	return 2;
 
+}
 //**************************************************************
 void World::update(){
  	int iter;
@@ -150,48 +196,22 @@ void World::update(){
 	 			updateBallCollision(&ball[i],&ball[j],i,j);
 	 		}
 	 	}
-	 	
-	 	for(iter=1;iter<8;iter++)
+	 	if(ball[0].active==false)
 	 	{
-	 		if(ball[iter].active)
-	 		break;
-	 	}
-	 	//cout << "Active RED Ball " << iter << "\n";
-	 	if(iter==8)
-	 	{
-	 		if('R'==player[0].balltype){
-	 			cout << "Player 0 Won\n";
-	 			_WINNER = FIRST;
-	 		}
-	 		else{
-	 			cout << "Player 1 Won\n";
+	 		int getBallfinished=typeOfBallFinished();
+	 		if(getBallfinished==2)
+	 		{
+	 			if(activePlayer==0)
 	 			_WINNER = SECOND;
-	 		}
-	 		_STATE = START;
-	 		_SCREEN = END; 
-	 	}
-	 	
-	 	for(iter=8;iter<15;iter++)
-	 	{
-	 		if(ball[iter].active)
-	 		break;
-	 	}
-	 	//cout << "Active YELLOW Ball  " << iter <<"\n";
-	 	if(iter==15)
-	 	{
-	 		if('Y'==player[0].balltype){
-	 			cout << "Player 0 Won\n";
+	 			else
 	 			_WINNER = FIRST;
+	 			
+	 			_STATE=START;
+	 			_SCREEN = END; 	
 	 		}
-	 		else{
-	 			cout << "Player 1 Won\n";
-	 			_WINNER = SECOND;
-	 		}
-	 		_STATE=START;
-	 		_SCREEN = END; 
 	 	}
-	 	
-	 	
+	 	/*
+	 	*/
  	}
  	else if (_STATE == READY)
  	{
@@ -323,7 +343,9 @@ bool World::isNextCollision(Ball *b1,Ball *b2){
 void World::defineBallTypes()
 {
 	int i;
-	for(i=0;i<8;i++)
+	ball[0].Balltype='B';
+	
+	for(i=1;i<8;i++)
 	ball[i].Balltype='R';
 	
 	for(i=8;i<15;i++)
@@ -346,7 +368,7 @@ void World::updatePlayerInfo(Ball b,int activePlayer)              // Called if 
 	char color=b.Balltype;
 	if(b.Balltype=='R')
 	inverseBallColor='Y';
-	else
+	else if(b.Balltype=='Y')
 	inverseBallColor='R';
 	
 	player[activePlayer].setballtype(color);

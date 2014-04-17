@@ -104,7 +104,7 @@ void showFOUL(){
     gluOrtho2D(0, win.width, 0, win.height);  // set to orthogonal projection
 
     float color[4] = {1, 1, 1, 1};
-
+    void * font = GLUT_BITMAP_TIMES_ROMAN_24;
     stringstream ss;
     drawString(ss.str().c_str(), win.width/2, win.height/2, color, font);
     ss.str(""); // clear buffer
@@ -136,7 +136,7 @@ void showInfo(){
     gluOrtho2D(0, win.width, 0, win.height);  // set to orthogonal projection
 
     float color[4] = {1, 1, 1, 1};
-
+    void * font = GLUT_BITMAP_TIMES_ROMAN_24;
     stringstream ss;
     
     ss.str(""); // clear buffer
