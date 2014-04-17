@@ -65,6 +65,10 @@ void World::update(){
 			stick.update(0,0);
 			//_STATE = READY;
 		}
+		else{
+			stick.updateTarget(qBall.pos);
+			stick.update(0,0);
+		}
  		//click will trigger the hit button
 		point camPos;
 		camPos.x = stick.target.x + stick.length*stick.sinTheta*camFar;
