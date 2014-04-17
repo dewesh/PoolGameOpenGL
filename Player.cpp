@@ -17,7 +17,7 @@ void Player::setballtype(char ball)
 
 void Player::incrementScore()
 {
-	score+=10;
+	score+=1;
 }
 
 int Player::getScore()

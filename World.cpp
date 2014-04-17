@@ -117,10 +117,22 @@ World::World(){
 	 		updateBallCollision(&qBall,&ball[i],15,i);
 	 		if(checkHole(&ball[i])){
 	 			ball_pocketed=1;
-	 			ball[i].active=false;
-	 			//if this is the first hole then only update the player
 	 			updatePlayerInfo(ball[i],activePlayer);
 	 			cout << "ball::" << i << " pocketed" <<endl;
+	 			if(player[0].balltype==ball[i].Balltype)
+	 			{
+	 				player[0].incrementScore();
+	 				ball[i].pos.z = -(table->len/2+table->thickness + qBall.radius*2);
+	 				ball[i].pos.x = table->bre/2+table->thickness-qBall.radius*3*player[0].score;
+	 			}
+	 			else{
+	 				player[1].incrementScore();
+	 				ball[i].pos.z = (table->len/2+table->thickness + qBall.radius*2);
+	 				ball[i].pos.x = table->bre/2+table->thickness-qBall.radius*3*player[1].score;
+	 			}
+	 			ball[i].active=false;
+	 			//if this is the first hole then only update the player
+	 			
 	 		}
 	 		for (int j = i+1; j < 15; ++j)
 	 		{
@@ -363,7 +375,8 @@ bool World::checkHole(Ball *b1){
 		dist = sqrt(((holes[i].pos.x-b1->pos.x)*(holes[i].pos.x-b1->pos.x)) + ((holes[i].pos.y-b1->pos.y)*(holes[i].pos.y-b1->pos.y)) + ((holes[i].pos.z-b1->pos.z)*(holes[i].pos.z-b1->pos.z)));
 		if(dist <= requiredDist){
 			b1->reset();
-			b1->pos.y = -b1->radius*2;
+			//b1->pos.y = -b1->radius*2;
+			
 			b1->active = false;
 			isPocket = true;
 			break;

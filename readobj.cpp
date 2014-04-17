@@ -35,6 +35,7 @@ static char str[200];
 void * font = GLUT_BITMAP_9_BY_15;
 //**************************************************************
 void checkCollisionWithTable(Ball *b){
+	if(b->active){
 	if (b->pos.x < xmin+b->radius ){
 		b->pos.x = xmin+b->radius;
 		b->velocity.x = -(b->velocity.x);
@@ -54,6 +55,7 @@ void checkCollisionWithTable(Ball *b){
 		b->pos.z = zmax-b->radius;
 		b->velocity.z = -(b->velocity.z);
 		b -> previousCollison = -1;
+	}
 	}
 }
 //**************************************************************
@@ -136,14 +138,17 @@ void showInfo(){
     float color[4] = {1, 1, 1, 1};
 
     stringstream ss;
-    drawString(ss.str().c_str(), 1, win.height-10, color, font);
+    
     ss.str(""); // clear buffer
-    ss << "Render-To-Texture Time: ms" << ends;
-    drawString(ss.str().c_str(), 1, win.height-(2*10), color, font);
+    ss << "PLAYER 1" << ends;
+    drawString(ss.str().c_str(), 1,win.height/10*9, color, font);
     ss.str("");
 
-    ss << "Press SPACE to toggle FBO." << ends;
-    drawString(ss.str().c_str(), 1, 1, color, font);
+    ss << "PLAYER 2" << ends;
+    drawString(ss.str().c_str(), win.width-150, win.height/10*9, color, font);
+
+	
+
     // restore projection matrix
     glPopMatrix();                   // restore to previous projection matrix
     // restore modelview matrix
@@ -407,7 +412,7 @@ void display() {
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 		//gluLookAt( world.camera->cameraFrom.x,world.camera->cameraFrom.y,world.camera->cameraFrom.z, world.camera->cameraTo.x,0,world.camera->cameraTo.z, 0,1,0);
-		gluLookAt( 0,280,0, 0,0,0, 1,0,0);
+		gluLookAt( 0,380,0, 0,0,0, 1,0,0);
 		renderGameScreen();
 		world.update();
 		for (int i = 0; i < 15; ++i)
