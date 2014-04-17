@@ -146,6 +146,22 @@ void showInfo(){
 
     ss << "PLAYER 2" << ends;
     drawString(ss.str().c_str(), win.width-150, win.height/10*9, color, font);
+    if(world.activePlayer==0)
+    {
+    	glPushMatrix();	
+	glColor3f(0,1,0);
+	glTranslatef(60,world.ball[0].radius,win.height/10*9-50);  //Multiply the current matrix by a translation matrix
+	glutSolidSphere  (world.ball[0].radius,50,50); 
+	glPopMatrix();
+    }
+    else
+    {
+    	glPushMatrix();	
+	glColor3f(0,1,0);
+	glTranslatef(win.width-150,world.ball[0].radius,win.height/10*9-50);  //Multiply the current matrix by a translation matrix
+	glutSolidSphere  (world.ball[0].radius,50,50); 
+	glPopMatrix();
+    }
 
 	
 

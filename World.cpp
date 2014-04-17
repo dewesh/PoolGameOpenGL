@@ -144,6 +144,7 @@ void World::update(){
 		//qBall.firstCollision=false;
 		stick.reset();
 		FOUL=false;
+		ball_pocketed=0;
  		_STATE = RUNNING;
  		std::cout << "RUNNING" << std::endl ;
  	}
@@ -178,8 +179,14 @@ void World::update(){
 	 	{
 	 		ball[i].update();
 	 		updateBallCollision(&qBall,&ball[i],15,i);
-	 		if(checkHole(&ball[i])){
+	 		if(checkHole(&ball[i]) ){
+	 			if(player[activePlayer].balltype=='W' || player[activePlayer].balltype==ball[i].Balltype)
 	 			ball_pocketed=1;
+	 			else if(player[activePlayer].balltype!=ball[i].Balltype && ball_pocketed!=1)
+	 			{
+	 				ball_pocketed=0;
+	 			}
+	 			
 	 			updatePlayerInfo(ball[i],activePlayer);
 	 			cout << "ball::" << i << " pocketed" <<endl;
 	 			if(player[0].balltype==ball[i].Balltype)
