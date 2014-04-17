@@ -144,7 +144,6 @@ void World::update(){
 	 			}
 	 			ball[i].active=false;
 	 			//if this is the first hole then only update the player
-	 			
 	 		}
 	 		for (int j = i+1; j < 15; ++j)
 	 		{
@@ -152,7 +151,7 @@ void World::update(){
 	 		}
 	 	}
 	 	
-	 	for(iter=0;iter<8;iter++)
+	 	for(iter=1;iter<8;iter++)
 	 	{
 	 		if(ball[iter].active)
 	 		break;
