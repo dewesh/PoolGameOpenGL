@@ -141,7 +141,7 @@ void showInfo(){
     
     ss.str(""); // clear buffer
     ss << "PLAYER 1" << ends;
-    drawString(ss.str().c_str(), 1,win.height/10*9, color, font);
+    drawString(ss.str().c_str(), 60,win.height/10*9, color, font);
     ss.str("");
 
     ss << "PLAYER 2" << ends;
@@ -174,7 +174,7 @@ void drawTable(Table *t){
         drawRect(t->len+2*t->thickness,t->bre+2*t->thickness);
 	glPopMatrix();				
 
-		glColor3f(0.5,0.2,0.2);
+		glColor3f(0.25,0.1,0.1);
 	//**************************************************************
 		glPushMatrix();				//sidebar	
 			glTranslatef(t->bre/2,t->height/2,0);				  
@@ -197,6 +197,7 @@ void drawTable(Table *t){
 	        drawRect(t->len+2*t->thickness,t->height);
 		glPopMatrix();
 	//**************************************************************
+		
 		glPushMatrix();				//sidebar	
 			glTranslatef(0,t->height/2,t->len/2);				  
 			glRotatef(-90,1,0,0);
@@ -222,6 +223,7 @@ void drawTable(Table *t){
 	        drawRect(t->bre+2*t->thickness,t->height);
 		glPopMatrix();
 	//**************************************************************
+		glColor3f(0.5,0.2,0.2);
 		glPushMatrix();				//topBar	
 			glTranslatef(0,t->height,t->len/2+t->thickness/2);				  
 			glRotatef(90,0,1,0);
@@ -535,7 +537,7 @@ void keyboard ( unsigned char key, int mousePositionX, int mousePositionY )
 void mouse ( int key1, int key2, int mousePositionX, int mousePositionY )		
 { 
 
-	if(key1 == 0 && key2 == 1 && world._STATE == POSITIONSTICK && world._SCREEN == GAME){
+	if(key1 == 0 && key2 == 1 && world._STATE == POSITIONSTICK && world._SCREEN == GAME && world.stick.force != 0){
 		//world.reset();
 		world._STATE = TAKESHOT;		
 	} else if(key1 == 0 && key2 == 1 && world._SCREEN == INTRODUCTION){
