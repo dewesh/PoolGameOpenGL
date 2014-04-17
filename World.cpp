@@ -122,8 +122,11 @@ void World::update(){
  		}
  		//call update
 	 	qBall.update();
-		if(checkHole(&qBall)==true)	// change the state to place ball 
-		FOUL=true;
+		if(checkHole(&qBall)==true){	// change the state to place ball 
+			FOUL=true;
+			qBall.pos.z = 0;
+			qBall.pos.x = table->bre/2;
+		}
 		
  		for (int i = 0; i < 15; ++i)
 	 	{
