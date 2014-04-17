@@ -175,6 +175,7 @@ void World::update(){
 			qBall.pos.x = table->bre/2;
 		}
 		
+		
  		for (int i = 0; i < 15; ++i)
 	 	{
 	 		ball[i].update();
