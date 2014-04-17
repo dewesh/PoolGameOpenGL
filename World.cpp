@@ -26,7 +26,7 @@ World::World(){
 	activePlayer=0;
 	defineBallTypes();
 	table = new Table(300,150);
-	for (int i = 0; i < 4; ++i)
+	for (int i = 0; i < 6; ++i)
 	{
 		holes[i].radius = 15;
 		holes[i].pos.y = holes[i].radius;
@@ -35,6 +35,8 @@ World::World(){
 	holes[1].pos = table->p2;
 	holes[2].pos = table->p3;
 	holes[3].pos = table->p4;
+	holes[4].pos = table->p5;
+	holes[5].pos = table->p6;
 	reset();
 }
 
@@ -411,7 +413,7 @@ bool World::checkHole(Ball *b1){
 	double nextPredictDistance;
 	bool isPocket = false;
 	if(b1->active)
-	for (int i = 0; i < 4; ++i)
+	for (int i = 0; i < 6; ++i)
 	{
 		requiredDist = (holes[i].radius);
 		dist = sqrt(((holes[i].pos.x-b1->pos.x)*(holes[i].pos.x-b1->pos.x)) + ((holes[i].pos.y-b1->pos.y)*(holes[i].pos.y-b1->pos.y)) + ((holes[i].pos.z-b1->pos.z)*(holes[i].pos.z-b1->pos.z)));

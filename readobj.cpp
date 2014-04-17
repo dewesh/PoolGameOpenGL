@@ -324,7 +324,7 @@ void renderGameScreen(){
 	
 	
 	//holes
-	for (int i = 0; i < 4; ++i)
+	for (int i = 0; i < 6; ++i)
 	{
 		glPushMatrix();										  // Push the current matrix stack
 			glColor3f(0,0,0);
