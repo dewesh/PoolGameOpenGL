@@ -9,6 +9,7 @@
 //**************************************************************
 World::World(){
 	_SCREEN = GAME;// update when all the screens added
+	_WINNER = FIRST;
 	camFar = 20;
 	qBall.pos.x = -50;
 	qBall.pos.z = 0;
@@ -48,7 +49,13 @@ void World::update(){
  	}
  	else if (_STATE == POSITIONSTICK)
  	{
- 		if(!qBall.active){	
+ 		stick.update(0,0);
+ 		if(FOUL){
+ 			qBall.active = true;
+			stick.updateTarget(qBall.pos);
+			stick.update(0,0);
+ 		}
+ 		else if(!qBall.active){	
 			qBall.pos.x = 0;
 			qBall.pos.z = table->len*0.25;
 			qBall.reset();
@@ -84,6 +91,7 @@ void World::update(){
 		qBall.velocity.x = -stick.power.x/5;
 		//qBall.firstCollision=false;
 		stick.reset();
+		FOUL=false;
  		_STATE = RUNNING;
  		std::cout << "RUNNING" << std::endl ;
  	}
@@ -148,12 +156,14 @@ void World::update(){
 	 	//cout << "Active RED Ball " << iter << "\n";
 	 	if(iter==8)
 	 	{
-	 		if('R'==player[0].balltype)
-	 		cout << "Player 0 Won\n";
-	 		
-	 		else
-	 		cout << "Player 1 Won\n";
-	 		
+	 		if('R'==player[0].balltype){
+	 			cout << "Player 0 Won\n";
+	 			_WINNER = FIRST;
+	 		}
+	 		else{
+	 			cout << "Player 1 Won\n";
+	 			_WINNER = SECOND;
+	 		}
 	 		_STATE = START;
 	 		_SCREEN = END; 
 	 	}
@@ -166,12 +176,14 @@ void World::update(){
 	 	//cout << "Active YELLOW Ball  " << iter <<"\n";
 	 	if(iter==15)
 	 	{
-	 		if('Y'==player[0].balltype)
-	 		cout << "Player 0 Won\n";
-	 		
-	 		else
-	 		cout << "Player 1 Won\n";
-	 		
+	 		if('Y'==player[0].balltype){
+	 			cout << "Player 0 Won\n";
+	 			_WINNER = FIRST;
+	 		}
+	 		else{
+	 			cout << "Player 1 Won\n";
+	 			_WINNER = SECOND;
+	 		}
 	 		_STATE=START;
 	 		_SCREEN = END; 
 	 	}
@@ -181,16 +193,24 @@ void World::update(){
  	else if (_STATE == READY)
  	{
     	stick.updateTarget(qBall.pos);
- 		stick.update(0,0);
- 		qBall.previousCollison = -1;
-
- 		if(ball_pocketed==0 || FOUL==true)
+ 		
+		qBall.previousCollison = -1;
+ 		if(ball_pocketed==0 || FOUL==true){
 		 	SwitchPlayer();
-		 	FOUL=false;
+		 }
+		 if(FOUL==true)
+		 	_STATE = FOULSTATE;
+		 else{
+		 	_STATE = POSITIONSTICK;
+		 }
+		 if(_STATE ==FOULSTATE){
+			qBall.pos.x = 0;
+			qBall.pos.z = table->len*0.25;
+			qBall.reset();
+			qBall.pos.y = qBall.radius;
+		 }
 	 	printf("Active Player at table is player-%d\n",activePlayer);
 		ball_pocketed =0 ;
- 		_STATE = POSITIONSTICK;
- 		std::cout << "READY" << std::endl ;
  	}
  	else{// stopped
 
@@ -338,9 +358,7 @@ bool World::updateBallCollision(Ball *a, Ball *b,int u,int v)
 {
 	
 	if(!( a -> previousCollison == v && b -> previousCollison == u)){
-<<<<<<< HEAD
-		if(isCollision(a,b)){
-		
+		if(isNextCollision(a,b)){
 			if(a->firstCollision==false && a==&qBall)
 			{
 			a->firstCollision=true;
@@ -350,9 +368,8 @@ bool World::updateBallCollision(Ball *a, Ball *b,int u,int v)
 				FOUL=true;
 				}
 			}
-=======
-		if(isNextCollision(a,b)){
->>>>>>> a03be07c149b81e1fa24c7c9ffacff178d1cc168
+		
+
 			
 			// printf("Collision : %d:%d,  ,%d:%d\n",a -> previousCollison,u,b -> previousCollison,v);
 			a -> previousCollison = v;

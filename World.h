@@ -22,6 +22,7 @@
  	bool FOUL;
  	int activePlayer;
  	Camera *camera;
+ 	enum PLAYER_TURN _WINNER ;
  	Table *table;
  	int camFar;
  	Stick stick;

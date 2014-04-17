@@ -357,7 +357,13 @@ void renderEndScreen(){
 
     //**************************************************************
     ss.str(""); // clear buffer
-    ss << "Winner is " << ends;
+    ss << "Winner is ";
+    if(world._WINNER == FIRST){
+    	ss << ": PLAYER-1 ";
+    }
+    else{
+    	ss << ": PLAYER-2 ";
+    }
     drawString(ss.str().c_str(), win.width/2-10, win.height/2, color, font);
     //**************************************************************
     ss.str("");
@@ -412,7 +418,7 @@ void display() {
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 		//gluLookAt( world.camera->cameraFrom.x,world.camera->cameraFrom.y,world.camera->cameraFrom.z, world.camera->cameraTo.x,0,world.camera->cameraTo.z, 0,1,0);
-		gluLookAt( 0,380,0, 0,0,0, 1,0,0);
+		gluLookAt( 0,280,0, 0,0,0, 1,0,0);
 		renderGameScreen();
 		world.update();
 		for (int i = 0; i < 15; ++i)
@@ -478,27 +484,40 @@ void keyboard ( unsigned char key, int mousePositionX, int mousePositionY )
   switch ( key ) 
   {
     case left_arr:
-		//camPosX--;
-    	if(world._STATE == POSITIONSTICK)
+	if(world._STATE == FOULSTATE)
+		world.qBall.pos.z--;
+    	if(world._STATE == POSITIONSTICK){
 		world.stick.update(-1,0);
-    	rot -=1;
+		rot -=1;
+    	}	
+    	
+    		
     	break;
     case right_arr:
 		// camPosX ++;
-    	rot +=1;
-    	if(world._STATE == POSITIONSTICK)
-    	world.stick.update(1,0);
+	if(world._STATE == FOULSTATE)
+		world.qBall.pos.z++;
+    	if(world._STATE == POSITIONSTICK){
+    		world.stick.update(1,0);
+    		rot +=1;
+    	}
+    	
     	break;
     case up_arr:
 		// camPosY--;
-    	if(world._STATE == POSITIONSTICK)
-		world.stick.update(0,1);	
+	if(world._STATE == FOULSTATE)
+		world.qBall.pos.x++;
+    	if(world._STATE == POSITIONSTICK){
+		world.stick.update(0,1);
+	}	
     	//velocity.y +=0.5;
     	break;
     case down_arr:
-		// camPosY++;
-    	if(world._STATE == POSITIONSTICK)
-		world.stick.update(0,-1);	
+	if(world._STATE == FOULSTATE)
+		world.qBall.pos.x--;
+    	if(world._STATE == POSITIONSTICK){
+		world.stick.update(0,-1);
+	}	
     	//velocity.y -=0.5;
 	    break;
     case space:
@@ -525,6 +544,9 @@ void mouse ( int key1, int key2, int mousePositionX, int mousePositionY )
 	}else if(key1 == 0 && key2 == 1 && world._SCREEN == END){
 		//world.reset();
 		world._SCREEN = INTRODUCTION;		
+	}
+	else if(key1 == 0 && key2 == 1 && world._STATE == FOULSTATE){
+		world._STATE = POSITIONSTICK;
 	}
 	cout << key2;
 }
@@ -554,7 +576,7 @@ int main(int argc, char **argv)
 	xmax = world.table->p1.x;
 	zmax = world.table->p1.z;
 	zmin = world.table->p3.z;
-	world._SCREEN = END;
+	world._SCREEN = INTRODUCTION;
 	// initialize and run program
 	glutInit(&argc, argv);                                      // GLUT initialization
 	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH );  // Display Mode
