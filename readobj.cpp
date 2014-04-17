@@ -141,30 +141,16 @@ void showInfo(){
     
     ss.str(""); // clear buffer
     ss << "PLAYER 1" << ends;
-    drawString(ss.str().c_str(), 60,win.height/10*9, color, font);
+    drawString(ss.str().c_str(), 10,win.height/10*9, color, font);
     ss.str("");
 
     ss << "PLAYER 2" << ends;
-    drawString(ss.str().c_str(), win.width-150, win.height/10*9, color, font);
-    if(world.activePlayer==0)
-    {
-    	glPushMatrix();	
-	glColor3f(0,1,0);
-	glTranslatef(60,world.ball[0].radius,win.height/10*9-50);  //Multiply the current matrix by a translation matrix
-	glutSolidSphere  (world.ball[0].radius,50,50); 
-	glPopMatrix();
-    }
-    else
-    {
-    	glPushMatrix();	
-	glColor3f(0,1,0);
-	glTranslatef(win.width-150,world.ball[0].radius,win.height/10*9-50);  //Multiply the current matrix by a translation matrix
-	glutSolidSphere  (world.ball[0].radius,50,50); 
-	glPopMatrix();
-    }
-
+    drawString(ss.str().c_str(), win.width-130, win.height/10*9, color, font);
+    ss.str("");
 	
-
+	if(world._STATE ==FOULSTATE)
+	ss << "USE A,S,W,D To position the QBALL and Click to Confirm" << ends;
+    	drawString(ss.str().c_str(), win.width/3, win.height/11*10.5, color, font);
     // restore projection matrix
     glPopMatrix();                   // restore to previous projection matrix
     // restore modelview matrix
@@ -264,6 +250,27 @@ void drawTable(Table *t){
 void renderGameScreen(){
 	drawTable(world.table);
 	
+	
+	if(world.activePlayer==0)
+    	{
+	    	glPushMatrix();	
+		glColor3f(0,1,0);
+		glTranslatef(world.table->bre/2+world.table->thickness+2*world.qBall.radius,world.ball[0].radius,-(world.table->len/2+world.table->thickness+10*world.qBall.radius));  //Multiply the current matrix by a translation matrix
+		glutSolidSphere  (world.ball[0].radius,50,50); 
+		glPopMatrix();
+    	}
+    	else
+    	{
+	    	glPushMatrix();	
+		glColor3f(0,1,0);
+		glTranslatef(world.table->bre/2+world.table->thickness+2*world.qBall.radius,world.ball[0].radius,(world.table->len/2+world.table->thickness+10*world.qBall.radius));  //Multiply the current matrix by a translation matrix
+		glutSolidSphere  (world.ball[0].radius,50,50); 
+		glPopMatrix();
+    	}
+
+	
+	
+	
 	if(world.FOUL==true)
 	showFOUL();
 	
@@ -273,7 +280,7 @@ void renderGameScreen(){
 			glTranslatef(world.qBall.pos.x,0,world.qBall.pos.z);
 	  		glRotatef(world.stick.angle,0,1,0);
 			glBegin(GL_LINES);
-				glVertex3f(0, world.qBall.radius, 0); glVertex3f(0, world.qBall.radius, -200);
+				glVertex3f(0, world.qBall.radius, 0); glVertex3f(0, world.qBall.radius, -400);
 			glEnd();
 		glPopMatrix();  //
 	}

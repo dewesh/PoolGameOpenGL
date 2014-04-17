@@ -294,6 +294,8 @@ void World::update(){
 	qBall.pos.x = 0;
 	qBall.pos.z = table->len*0.25;
 	qBall.reset();
+	FOUL=false;
+	activePlayer=0;
 	qBall.pos.y = qBall.radius;
 	qBall.active = true;
 	stick.updateTarget(qBall.pos);
