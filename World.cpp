@@ -4,7 +4,7 @@
 #include <stdio.h>
 
 
-#define root2 sqrt(2)
+#define root2 sqrt(2)*2
 
 //**************************************************************
 World::World(){
@@ -38,7 +38,7 @@ World::World(){
 }
 
 //**************************************************************
- void World::update(){
+void World::update(){
  	int iter;
  
  	if(_STATE == START){
@@ -250,7 +250,7 @@ World::World(){
 	camera->setCamera(camPos,qBall.pos);
  }
 //**************************************************************
- double World::getPhi(Ball b1,Ball b2){
+double World::getPhi(Ball b1,Ball b2){
  	//double dist;
  	//dist = ((b2.pos.x-b1.pos.x)*(b2.pos.x-b1.pos.x)) + ((b2.pos.y-b1.pos.y)*(b2.pos.y-b1.pos.y)) + ((b2.pos.z-b1.pos.z)*(b2.pos.z-b1.pos.z));
  	double phi;
@@ -266,6 +266,24 @@ bool World::isCollision(Ball *b1,Ball *b2){
 	if(b1->active && b2->active){
 		requiredDist = (b2->radius+b1->radius);
 		dist = sqrt(((b2->pos.x-b1->pos.x)*(b2->pos.x-b1->pos.x)) + ((b2->pos.y-b1->pos.y)*(b2->pos.y-b1->pos.y)) + ((b2->pos.z-b1->pos.z)*(b2->pos.z-b1->pos.z)));
+		if(dist <= requiredDist){
+			
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+	else{
+		return false;
+	}
+}
+//**************************************************************
+bool World::isNextCollision(Ball *b1,Ball *b2){
+	double dist,requiredDist;
+	if(b1->active && b2->active){
+		requiredDist = (b2->radius+b1->radius);
+		dist = sqrt( pow((b2->pos.x+b2->velocity.x-b1->pos.x-b1->velocity.x),2) +pow((b2->pos.z+b2->velocity.z-b1->pos.z-b1->velocity.z),2) );
 		if(dist <= requiredDist){
 			
 			return true;
@@ -320,6 +338,7 @@ bool World::updateBallCollision(Ball *a, Ball *b,int u,int v)
 {
 	
 	if(!( a -> previousCollison == v && b -> previousCollison == u)){
+<<<<<<< HEAD
 		if(isCollision(a,b)){
 		
 			if(a->firstCollision==false && a==&qBall)
@@ -331,6 +350,9 @@ bool World::updateBallCollision(Ball *a, Ball *b,int u,int v)
 				FOUL=true;
 				}
 			}
+=======
+		if(isNextCollision(a,b)){
+>>>>>>> a03be07c149b81e1fa24c7c9ffacff178d1cc168
 			
 			// printf("Collision : %d:%d,  ,%d:%d\n",a -> previousCollison,u,b -> previousCollison,v);
 			a -> previousCollison = v;

@@ -32,6 +32,7 @@
  	void reset();
  	double getPhi(Ball,Ball);
  	bool isCollision(Ball *,Ball *);
+ 	bool isNextCollision(Ball *,Ball *);
  	bool checkHole(Ball*);
  	bool updateBallCollision(Ball *, Ball *,int ,int);
  	void defineBallTypes();
