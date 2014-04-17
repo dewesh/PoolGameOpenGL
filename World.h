@@ -17,7 +17,7 @@
  	enum SCREEN _SCREEN;
  	Ball ball[15];
  	Ball qBall;
- 	Ball holes[4];
+ 	Ball holes[6];
  	Player player[2];
  	bool FOUL;
  	int activePlayer;

@@ -268,7 +268,7 @@ void renderGameScreen(){
   		quadratic = gluNewQuadric();
   		glTranslatef(world.stick.pos.x,world.qBall.radius,world.stick.pos.z);
   		glRotatef(world.stick.angle,0,1,0);
-  		gluCylinder(quadratic,world.qBall.radius*0.2,world.qBall.radius * 0.5,world.qBall.radius*30.0,32,32);
+  		gluCylinder(quadratic,world.qBall.radius*0.2,world.qBall.radius * 0.5,world.qBall.radius*30.0,100,100);
 	glPopMatrix();  // Pop the current matrix stack	
 	glPushMatrix();		
 		glColor3f(1,1,1);								  // Push the current matrix stack
@@ -276,7 +276,7 @@ void renderGameScreen(){
   		quadratic2 = gluNewQuadric();
   		glTranslatef(world.stick.pos.x,world.qBall.radius,world.stick.pos.z);
   		glRotatef(world.stick.angle,0,1,0);
-  		gluCylinder(quadratic2,world.qBall.radius*0.21,world.qBall.radius * 0.251,world.qBall.radius*5.0,32,32);
+  		gluCylinder(quadratic2,world.qBall.radius*0.21,world.qBall.radius * 0.221,world.qBall.radius,100,100);
 	glPopMatrix();  // Pop the current matrix stack	
 	glPushMatrix();		
 		glColor3f(0.6,0.3,0.3);								  // Push the current matrix stack
@@ -284,7 +284,7 @@ void renderGameScreen(){
   		quadratic1 = gluNewQuadric();
   		glTranslatef(world.stick.pos.x,world.qBall.radius,world.stick.pos.z);
   		glRotatef(world.stick.angle,0,1,0);
-  		gluCylinder(quadratic1,world.qBall.radius*0.195,world.qBall.radius *0.795,world.qBall.radius*60.0,32,32);
+  		gluCylinder(quadratic1,world.qBall.radius*0.195,world.qBall.radius *0.795,world.qBall.radius*60.0,100,100);
 	glPopMatrix();  // Pop the current matrix stack	
 
 	//que ball update
@@ -324,7 +324,7 @@ void renderGameScreen(){
 	
 	
 	//holes
-	for (int i = 0; i < 4; ++i)
+	for (int i = 0; i < 6; ++i)
 	{
 		glPushMatrix();										  // Push the current matrix stack
 			glColor3f(0,0,0);

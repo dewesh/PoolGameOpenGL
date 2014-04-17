@@ -9,7 +9,7 @@ using namespace std;
  class Table
  {
  public:
- 	point p1,p2,p3,p4;	// inner boundary
+ 	point p1,p2,p3,p4,p5,p6;	// inner boundary
  	double len,bre;
  	double thickness; // may be 5 % of length
  	double height;
