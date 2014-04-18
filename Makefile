@@ -1,5 +1,5 @@
-a.out: readobj.cpp libBall.a libWorld.a libCamera.a libStick.a libTable.a libPlayer.a
-	g++ -Wall readobj.cpp -L. -lWorld -lBall -lCamera -lPlayer -lStick -lTable -lglut -lGLU
+pool: readobj.cpp libBall.a libWorld.a libCamera.a libStick.a libTable.a libPlayer.a
+	g++ -o pool -Wall readobj.cpp -L. -lWorld -lBall -lCamera -lPlayer -lStick -lTable -lglut -lGLU
 
 libWorld.a: World.o
 	ar -rcs libWorld.a World.o
