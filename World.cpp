@@ -57,6 +57,10 @@ int World::typeOfBallFinished(){
 	 			cout << "Player 1 Won\n";
 	 			_WINNER = SECOND;
 	 		}
+	 		if(player[activePlayer].balltype=='R')
+	 		{
+	 			FOUL=false;
+	 		}
 	 		_STATE = START;
 	 		_SCREEN = END; 
 	 		return 0;
@@ -77,6 +81,10 @@ int World::typeOfBallFinished(){
 	 		else{
 	 			cout << "Player 1 Won\n";
 	 			_WINNER = SECOND;
+	 		}
+	 		if(player[activePlayer].balltype=='Y')
+	 		{
+	 			FOUL=false;
 	 		}
 	 		_STATE=START;
 	 		_SCREEN = END; 
