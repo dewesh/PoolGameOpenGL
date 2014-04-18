@@ -582,8 +582,10 @@ void myMouseFunc(int x, int y){
 	currMousePosX = x-win.width/2;
 	currMousePosY = win.height-y;
 	if(world._STATE == POSITIONSTICK){
-		t = atan2(-currMousePosX,-currMousePosY);
-		world.stick.angle = rot-t*180/3.145;
+		//t = atan2(-currMousePosX,-currMousePosY);
+		t = atan2(-(x-win.width/2),currMousePosY);
+		//t = ((x-win.width/2)*90)/(win.width/2);
+		world.stick.angle = rot-t;
 		world.stick.update(0,0);
 	}
 }
